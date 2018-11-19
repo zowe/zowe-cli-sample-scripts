@@ -1,0 +1,121 @@
+/***********************************************************************************
+ * MIT License                                                                     *
+ *                                                                                 *
+ * Copyright (c) 2018 CA                                                           *
+ *                                                                                 *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy    *
+ * of this software and associated documentation files (the "Software"), to deal   *
+ * in the Software without restriction, including without limitation the rights    *
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell       *
+ * copies of the Software, and to permit persons to whom the Software is           *
+ * furnished to do so, subject to the following conditions:                        *
+ *                                                                                 *
+ * The above copyright notice and this permission notice shall be included in all  *
+ * copies or substantial portions of the Software.                                 *
+ *                                                                                 *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR      *
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,        *
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE     *
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER          *
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,   *
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE   *
+ * SOFTWARE.                                                                       *
+ ***********************************************************************************/
+
+pipeline {
+    agent {
+        label 'ca-brightside-agent'
+    }
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '20'))
+    }
+    stages {
+        /************************************************************************
+         * STAGE
+         * -----
+         * Setup Profile Credentials
+         *
+         * TIMEOUT
+         * -------
+         * 2 Minutes
+         *
+         * DESCRIPTION
+         * -----------
+         * Setup the profile credentials using dbus-launch and keytar
+         *
+         * OUTPUTS
+         * -------
+         * None
+         ************************************************************************/
+        stage('Setup Profile Credentials') {
+            environment {
+              SCRIPT = "./setup_credentials.sh"
+              CREDENTIALS = credentials('sujays-playground')
+            }
+            steps {
+                timeout(time: 2, unit: 'MINUTES') {
+                    echo 'Setup Profile Credentials'
+                    sh "chmod +x $SCRIPT && $SCRIPT"
+                }
+            }
+        }
+
+        /************************************************************************
+         * STAGE
+         * -----
+         * Build - Deploy - Test
+         *
+         * TIMEOUT
+         * -------
+         * 2 Minutes
+         *
+         * DESCRIPTION
+         * -----------
+         * This is where the demo will be run from.
+         *
+         * OUTPUTS
+         * -------
+         * None
+         ************************************************************************/
+        stage('Build - Deploy - Test') {
+            environment {
+                RUN_SCRIPT = "./run_demo.sh"
+                DEMO_SCRIPT = "./demo_content.sh"
+            }
+            steps {
+                timeout(time: 4, unit: 'MINUTES') {
+                    echo 'Build - Deploy - Test'
+                    sh "chmod +x $RUN_SCRIPT && chmod +x $DEMO_SCRIPT && $RUN_SCRIPT"
+                }
+            }
+        }
+    }
+    // post {
+    //     /************************************************************************
+    //      * POST BUILD ACTION
+    //      *
+    //      * Sends out an email indicating the status of the build. Demo purposes
+    //      * only.
+    //      ************************************************************************/
+    //     always {
+    //         script {
+    //             def recipients = ""
+    //             def subject = "${currentBuild.currentResult}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'"
+    //             def consoleOutput = """
+    //             <p>Branch: <b>${BRANCH_NAME}</b></p>
+    //             <p>Check console output at "<a href="${RUN_DISPLAY_URL}">${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>"</p>
+    //             """
+
+    //             emailext(
+    //                     subject: subject,
+    //                     to: recipients,
+    //                     body: "Build Finished ${consoleOutput}",
+    //                     recipientProviders: [[$class: 'DevelopersRecipientProvider'],
+    //                                           [$class: 'UpstreamComitterRecipientProvider'],
+    //                                           [$class: 'CulpritsRecipientProvider'],
+    //                                           [$class: 'RequesterRecipientProvider']]
+    //             )
+    //         }
+    //     }
+    // }
+}
