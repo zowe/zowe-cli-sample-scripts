@@ -1,6 +1,6 @@
-# Zowe CLI: Demo Scripts
+# Zowe CLI: Sample Scripts
 
-This repository contains some of the scripts used to demo various components of the Zowe CLI orginized by components and use cases.
+This repository contains some sample scripts that utilize various components of the Zowe CLI organized by components and use cases.
 
 ## Components
 
