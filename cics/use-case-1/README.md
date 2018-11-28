@@ -9,8 +9,8 @@ Here is a description of the steps taken by the *[demo.sh](./demo.sh)* script.
 1. Define and install the resources to be used
 2. Upload your updated COBOL program (may be able to use the VSCode extension for this)
 3. Submit the job to compile and link your COBOL source and wait for it to complete. You may use *[compcbl.jcl](./compcbl.jcl)* as a guide to accomplish this.
-  a. Use the *--view-all-spool-content* or *--vasc* flag
-  b. **OR** Use the *[compile.sh](./compile.sh)* script
+    - Use the *--view-all-spool-content* or *--vasc* flag
+    - **OR** Use the *[compile.sh](./compile.sh)* script
 4. Refresh the program, i.e. perform a NEWCOPY on the CICS resource
 5. Voila! You can now execute your newly defined transaction.
 
