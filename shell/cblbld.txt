@@ -1,0 +1,23 @@
+#!/bin/sh
+
+#download code
+bright endevor list ele -i WEBSMFNE --env dev --sys ccs --sub demo
+
+bright endevor retrieve element COBLSAMP --env dev --sys ccs --sub demo --typ cobpgm --tf samp.cbl --i WEBSMFNE --sn 1 --ccid share --com "SHARE demo"
+#code samp.cbl
+
+#upload code
+bright endevor update element COBLSAMP --env dev --sys ccs --sub demo --typ cobpgm --ff samp.cbl --i WEBSMFNE --sn 1 --ccid share --com "SHARE demo"
+
+#build code
+bright endevor generate element COBLSAMP --env dev --sys ccs --sub demo --typ cobpgm --i WEBSMFNE --sn 1 --ccid share --com "SHARE demo"
+
+#deploy code
+bright fmp copy ds A90SMVS.MOTM.CCS.DEMO.D1.LOADLIB solsu01.cobol.load
+
+#test
+bright jobs submit ds "solsu01.mimpds.cntl(runcbl)"
+
+bright jobs view sfbi JOB07689 2
+
+#show subset of this from jenkins

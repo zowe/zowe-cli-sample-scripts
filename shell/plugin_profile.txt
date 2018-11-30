@@ -1,0 +1,10 @@
+bright plugins uninstall @brightside/endevor
+
+bright plugins install @brightside/endevor@next
+
+ bright plugins validate @brightside/endevor
+
+bright profiles create endevor-profile endtest --host tso1 --port 50004 --use
+r solsu01 --pass xxx --protocol http
+
+bright endevor list ele -i WEBSMFNE --env dev --sys ccs --sub demo

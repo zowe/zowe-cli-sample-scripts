@@ -1,0 +1,12 @@
+fmp + zos:
+
+bright files list ds "solsu01.mim.*"
+bright files list am "solsu01.mim.cntl"
+
+bright file-master-plus copy ds solsu01.mim.cntl solsu01.mim.demo.cntl
+bright files list ds "solsu01.mim.*"
+bright files list am "solsu01.mim.demo.cntl"
+
+
+db2:
+bright db2 execute sql -q "SELECT 'Hello World' FROM SYSIBM.SYSDUMMY1"
