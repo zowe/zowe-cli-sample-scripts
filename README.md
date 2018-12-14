@@ -8,7 +8,7 @@ Here are some of the components that can be demoed using the scipts in this repo
 
 ### Core CLI
 
-1. [JENKINS: Submit a job and wait for it to complete](./Jenkins_example/README.md)
+1. [JENKINS: Submit a job and wait for it to complete](./Jenkins/Simple%20Pipeline/README.md)
 
 ### CICS
 
