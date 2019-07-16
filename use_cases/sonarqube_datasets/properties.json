@@ -1,0 +1,18 @@
+{
+    "zosmfHost": "your.zosmf.hostname",
+    "zosmfPort": "your.zosmf.port",
+    "src": {
+        "cbl": [
+            "cobol.dataset1",
+            "cobol.dataset2"
+        ],
+        "cpy": [
+            "copybook.dataset1",
+            "copybook.dataset2"
+        ],
+        "pli": [
+            "pli.dataset1",
+            "pli.dataset2"
+        ]
+    }
+}
