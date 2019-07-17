@@ -10,10 +10,7 @@ Here are some of the components that can be demoed using the scipts in this repo
 
 1. [JENKINS: Submit a job and wait for it to complete](./Jenkins/Simple%20Pipeline/README.md)
 
-### CICS
+## Use Cases
+The `use_cases` directory has self-contained examples of various common use cases implemented with Zowe CLI.
 
-1. [Update a COBOL program executed via a CICS transaction](./cics/use-case-1/README.md)
-
-### DB2
-
-- TBD
+- [SonarQube Data Set Analysis](./use_cases/sonarqube_datasets/)
