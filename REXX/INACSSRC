@@ -11,11 +11,9 @@ desc = "/*" desc "*/"
  
 'EXECIO * DISKR INPUT (FINIS STEM IN.'
  
-/* SAY 'There are ' IN.0 ' records in the file' */
- 
 u. = ''
 d. = 0
-counter = 0
+counter = 1
  
 Do i=1 to IN.0
   If Find(IN.i,"FILTLIST PROJ_USERS")<>0 Then Do
@@ -26,25 +24,19 @@ Do i=1 to IN.0
     value1 = INSERT(desc,value1,idx+13)
     value2 = INSERT(' ',temp1,0,idx)
     u.counter = value1
-    counter = counter + 1
     u.0 = counter
+    counter = counter + 1
     u.counter = value2
-    counter = counter + 1
     u.0 = counter
+    counter = counter + 1
   End
   Else Do
-  u.counter = IN.i
-  counter = counter + 1
-  u.0 = counter
+    u.counter = IN.i
+    u.0 = counter
+    counter = counter + 1
   End
 End
- 
-/* SAY 'There are ' u.0 ' records in the file' */
  
 'EXECIO * DISKW INPUT (FINIS STEM u.'
 'FREE F(INPUT)'
  
-/* Do i=1 to u.0 */
-/*  Say u.i */
-/* End */
-
