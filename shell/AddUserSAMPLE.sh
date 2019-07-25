@@ -216,5 +216,20 @@ echo To verify the work we just did, entering the command TSO LU $username
 zowe tso issue command "LU $username OMVS"
 
 else
-    echo Your UserID $username has been officially added to ZLP$system. The password the user can use to login to z/OS is WELCOME. Have a great day and remember, z/OS is easy :)
+    echo "Your UserID $username has been officially added to ZLP$system. The password the user can use to login to z/OS is WELCOME. Have a great day and remember, z/OS is easy :)"
 fi
+
+echo 'Are there any additional RACF Groups you want to connect $username too? (YES)'
+    read outputResponse2
+
+while [ "$outputResponse2" == "YES" ];  
+    do
+        echo "Enter the RACF Group you want to add $username too? Enter the RACF group OR enter DONE if you are done."  
+            read racfGroup
+        zowe tso issue cmd "CONNECT ($username) GROUP($racfGroup)"
+        echo "Are there any additional RACF Groups you want to connect $username too? (YES)"
+            read outputResponse2
+done 
+
+echo This is how your UserID is currently configured
+zowe tso issue command "LU $username OMVS"
