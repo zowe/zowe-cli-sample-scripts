@@ -217,6 +217,7 @@ zowe tso issue command "LU $username OMVS"
 
 else
     echo Your UserID $username has been officially added to ZLP$system. The password the user can use to login to z/OS is WELCOME. Have a great day and remember, z/OS is easy :)
+
 fi
 
 echo 'Are there any additional RACF Groups you want to connect $username too? (YES)'
@@ -233,3 +234,6 @@ done
 
 echo This is how your UserID is currently configured
 zowe tso issue command "LU $username OMVS"
+
+fi
+

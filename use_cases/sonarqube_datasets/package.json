@@ -1,0 +1,18 @@
+{
+  "name": "zowe-cli-sonarqube-sample",
+  "version": "1.0.0",
+  "description": "Sample SonarQube Analysis on source from Data Sets",
+  "scripts": {
+    "download": "node scripts/zowe_download.js",
+    "sonar": "sonar-scanner && npm run cleanup",
+    "cleanup": "node scripts/cleanup_source.js"
+  },
+  "keywords": [
+    "SonarQube",
+    "COBOL",
+    "z/OS",
+    "Mainframe"
+  ],
+  "author": "Zowe CLI Team",
+  "license": "EPL-2.0"
+}
