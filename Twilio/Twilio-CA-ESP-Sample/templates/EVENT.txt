@@ -1,0 +1,3 @@
+ EVENT ID({{esp.event.id}})  SYSTEM({{esp.event.system}})  REPLACE    
+ INVOKE '{{zos_src.dsn.hlq}}.{{zos_src.dsn.project}}.{{zos_src.dsn.type}}({{esp.event.member}})'   
+ ENDDEF

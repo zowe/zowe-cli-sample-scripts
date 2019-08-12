@@ -1,0 +1,12 @@
+/*************************************************/ 
+/* SCHEDULE DEFINITION ON CA ESP                 */ 
+/*************************************************/ 
+APPL {{esp.appl}}                                         
+JCLLIB  '{{zos_src.dsn.hlq}}.{{zos_src.dsn.project}}.{{zos_src.dsn.type}}'                                  
+CCCHK RC(1:4095) FAIL                               
+                                                    
+NOTIFY FAIL ALERT(SNOW)                             
+                                                    
+JOB  {{esp.jobname}}                                       
+   RUN ANY                                          
+ENDJOB                        
