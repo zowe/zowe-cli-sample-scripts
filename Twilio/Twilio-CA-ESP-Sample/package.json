@@ -1,0 +1,32 @@
+{
+  "name": "mainframe-devops-base-project",
+  "version": "1.0.0",
+  "description": "Mainframe DevOps Base Project",
+  "main": "index.js",
+  "scripts": {
+    "render": "node ./env_scripts/lib/render.js",
+    "watch": "node ./env_scripts/lib/watch.js",
+    "upload": "node ./env_scripts/lib/upload.js",
+    "load-def": "node ./env_scripts/lib/load-event-definitions.js",
+    "send-sms": "node ./env_scripts/lib/twilio-notification.js"
+  },
+  "repository": {
+    "type": "git"
+  },
+  "author": "gcartier@br.ibm.com",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/config": "0.0.34",
+    "@types/mustache": "^0.8.32",
+    "@types/node": "^11.10.5",
+    "config": "^3.0.1",
+    "mustache": "^3.0.1"
+  },
+  "dependencies": {
+    "@types/handlebars": "^4.1.0",
+    "handlebars": "^4.1.2",
+    "nodemon": "^1.18.10",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.5.3"
+  }
+}
