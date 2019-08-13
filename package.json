@@ -1,0 +1,29 @@
+{
+  "name": "zowe-cli-sample-scripts",
+  "version": "0.0.0",
+  "description": "Sample scripts",
+  "main": "index.js",
+  "scripts": {
+    "build": "node utils/updateLicense.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zowe/zowe-cli-sample-scripts.git"
+  },
+  "keywords": [
+    "zowe",
+    "zowe-cli",
+    "zowe-cli-sample",
+    "zowe-cli-scripts"
+  ],
+  "author": "Zowe",
+  "license": "EPL-2.0",
+  "bugs": {
+    "url": "https://github.com/zowe/zowe-cli-sample-scripts/issues"
+  },
+  "homepage": "https://github.com/zowe/zowe-cli-sample-scripts#readme",
+  "devDependencies": {
+    "glob": "^7.1.4",
+    "shebang-regex": "^3.0.0"
+  }
+}
