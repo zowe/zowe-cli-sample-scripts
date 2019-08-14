@@ -14,3 +14,4 @@ Here are some of the components that can be demoed using the scipts in this repo
 The `use_cases` directory has self-contained examples of various common use cases implemented with Zowe CLI.
 
 - [SonarQube Data Set Analysis](./use_cases/sonarqube_datasets/)
+- [Continuous Integration Pipeline](./use_cases/CI_pipeline/)
