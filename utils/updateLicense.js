@@ -13,7 +13,7 @@ const fs = require("fs");
 const path = require("path");
 
 // process all typescript files
-require("glob")("{*,!(node_modules)}{**/*.js,**/*.ts,**/Jenkinsfile,**/*.py,**/*.sh}", (globErr, filePaths) => {
+require("glob")("{*,!(node_modules)/}**/{*.js,*.ts,Jenkinsfile,*.py,*.sh}", (globErr, filePaths) => {
         if (globErr) {
             throw globErr;
         }
