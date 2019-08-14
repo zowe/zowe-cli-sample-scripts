@@ -1,0 +1,84 @@
+/*
+ * This program and the accompanying materials are made available under the terms of the *
+ * Eclipse Public License v2.0 which accompanies this distribution, and is available at  *
+ * https://www.eclipse.org/legal/epl-v20.html                                            *
+ *                                                                                       *
+ * SPDX-License-Identifier: EPL-2.0                                                      *
+ *                                                                                       *
+ * Copyright Contributors to the Zowe Project.                                           *
+ */
+
+def DISTRIBUTION_LIST = "comma_separated_email_addresses_for_people_that_need_to_be_alerted" 
+
+// Variables used in email alert
+def SYSTEM = "descriptive_system_name"
+def SERVICE_NAME = "name_of_the_monitored_service (eg. CICS)"
+
+pipeline {
+    agent {
+        // Docker agent used to run Zowe CLI commands
+        label 'ca-brightside-ce-agent'
+    }
+    environment {       
+        // z/OSMF Connection Details
+        // by using ZOWE_OPT_xxx environment variables, we don't have to pass those specific CLI parameters to the Zowe commands.
+        ZOWE_OPT_HOST = credentials("hostname_id_stored_in_jenkins_safe")
+        ZOWE_OPT_PORT = 999
+        ZOWE_OPT_REJECT_UNAUTHORIZED=false
+        // Other variables
+        SERVICE_STC = "name_of_the_started_task_which_is_running_the_service (eg. CICSxxx)"
+        SERVICE_PORT = "port_number_where_service_is_running (eg. 9999)"
+    }
+    stages {
+        /************************************************************************
+         * STAGE
+         * -----
+         * Verify service
+         *
+         * TIMEOUT
+         * -------
+         * None
+         *
+         * DESCRIPTION
+         * -----------
+         * Run NETSTAT TSO command using Zowe CLI, against a predefined port and 
+         * verify if expected service is listening on it
+         *
+         * OUTPUTS
+         * -------
+         * None 
+         ************************************************************************/
+        stage('Verify service'){
+            steps {
+                timeout(time: 10, unit: 'MINUTES') {
+                withCredentials([usernamePassword(credentialsId: 'autorun-credential-id', usernameVariable: 'ZOWE_OPT_USERNAME', passwordVariable: 'ZOWE_OPT_PASSWORD')]) {
+                    sh 'zowe zos-tso issue command "NETSTAT CONN (PORT $SERVICE_PORT" --user $ZOWE_OPT_USERNAME --pass $ZOWE_OPT_PASSWORD --account ACCT# | grep Listen | grep $SERVICE_STC'
+                }}
+            }
+        }
+    }
+    post {
+    // Sending email notification on failed runs
+        always {
+            script {
+                def buildStatus = currentBuild.currentResult
+                def recipients = DISTRIBUTION_LIST
+                def details = ""
+                try {
+                    if (buildStatus.equals("FAILURE")) {
+                        details += "Uptime Test failed for ${SERVICE_NAME} on ${SYSTEM}. Please investigate run ${currentBuild.number}, located here: ${currentBuild.absoluteUrl}"
+                        mail(to: recipients,
+                                subject: "BPro TEST FAILED! - ${SERVICE_NAME} DOWN ON ${SYSTEM}",
+                                body: details);
+                    }
+                } catch (e) {
+                    echo "Error sending an email for a ${buildStatus} run"
+                    currentBuild.result = buildStatus
+                    mail(to: recipients,
+                            subject: "BPro TEST - Error sending email notification",
+                            body: details);
+                }
+            }
+        } 
+    }
+}
