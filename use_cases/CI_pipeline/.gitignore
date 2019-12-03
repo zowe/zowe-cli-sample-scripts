@@ -1,0 +1,5 @@
+command-archive/
+endevor-report*.txt
+job-archive/
+mochawesome-report/
+node_modules/

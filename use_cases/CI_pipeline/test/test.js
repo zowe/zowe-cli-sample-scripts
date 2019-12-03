@@ -8,9 +8,10 @@
  * Copyright Contributors to the Zowe Project.                                           *
  */
 
-var assert = require('assert');
-var cmd = require('node-cmd');
-var config = require('../config.json');
+var assert = require('assert'),
+    cmd = require('node-cmd'),
+    config = require('../config.json'),
+    fs = require("fs");
 
 /**
  * Callback equivalent to that of node-cmd
@@ -39,6 +40,10 @@ function createMarble(color, quantity=1, cost=1, callback) {
   cmd.get(
     'zowe console issue command "F ' + config.cicsRegion + ',' + config.cicsTran + ' CRE ' + color + " " + quantity + " " + cost + '" --cn ' + config.cicsConsole,
     function (err, data, stderr) {
+      //log output
+      var content = "Error:\n" + err + "\n" + "StdErr:\n" + stderr + "\n" + "Data:\n" + data;
+      writeToFile("command-archive/create-marble", content);
+
       typeof callback === 'function' && callback(err, data, stderr);
     }
   );
@@ -53,6 +58,10 @@ function deleteMarble(color, callback) {
   cmd.get(
     'zowe console issue command "F ' + config.cicsRegion + ',' + config.cicsTran + ' DEL ' + color + '" --cn ' + config.cicsConsole,
     function (err, data, stderr) {
+      //log output
+      var content = "Error:\n" + err + "\n" + "StdErr:\n" + stderr + "\n" + "Data:\n" + data;
+      writeToFile("command-archive/delete-marble", content);
+
       typeof callback === 'function' && callback(err, data, stderr);
     }
   );
@@ -65,10 +74,13 @@ function deleteMarble(color, callback) {
 *
 */
 function getMarbleQuantity(color, callback) {
-  var db2 = (typeof process.env.DB2 === "undefined") ? "" : process.env.DB2,
-      command = 'zowe db2 execute sql -q "SELECT * FROM EVENT.MARBLE" --rfj ' + db2;
+  var command = 'zowe db2 execute sql -q "SELECT * FROM EVENT.MARBLE" --rfj';
 
-  cmd.get(command, function(err, data, stderr) { 
+  cmd.get(command, function(err, data, stderr) {
+    //log output
+    var content = "Error:\n" + err + "\n" + "StdErr:\n" + stderr + "\n" + "Data:\n" + data;
+    writeToFile("command-archive/get-marble-quantity", content);
+
     if(err){
       callback(err);
     } else if (stderr){
@@ -98,17 +110,33 @@ function updateMarble(color, quantity, callback) {
   cmd.get(
     'zowe console issue command "F ' + config.cicsRegion + ',' + config.cicsTran + ' UPD ' + color + " " + quantity + '" --cn ' + config.cicsConsole,
     function (err, data, stderr) {
+      //log output
+      var content = "Error:\n" + err + "\n" + "StdErr:\n" + stderr + "\n" + "Data:\n" + data;
+      writeToFile("command-archive/update-marble", content);
+
       typeof callback === 'function' && callback(err, data, stderr);
     }
   );
 }
 
 /**
- * Sleep function.
- * @param {number} ms Number of ms to sleep
- */
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+* Writes content to files
+* @param {string}           dir     directory to write content to
+* @param {string}           content content to write
+*/
+function writeToFile(dir, content) {
+  var d = new Date(),
+      filePath = dir + "/" + d.toISOString() + ".txt";
+
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  };
+  
+  fs.writeFileSync(filePath, content, function(err) {
+    if(err) {
+      return console.log(err);
+    }
+  });
 }
 
 describe('Marbles', function () {
@@ -147,7 +175,7 @@ describe('Marbles', function () {
       })
     });
 
-    it.only('should create a single marble with cost of 1', function (done) {
+    it('should create a single marble with cost of 1', function (done) {
       // Create marble
       createMarble(COLOR, 1, 1, function(err, data, stderr){
         if(err){
