@@ -1,66 +1,37 @@
-/*
- * This program and the accompanying materials are made available under the terms of the *
- * Eclipse Public License v2.0 which accompanies this distribution, and is available at  *
- * https://www.eclipse.org/legal/epl-v20.html                                            *
- *                                                                                       *
- * SPDX-License-Identifier: EPL-2.0                                                      *
- *                                                                                       *
- * Copyright Contributors to the Zowe Project.                                           *
- */
+var cmd = require('node-cmd'),
+    config = require('./config.json'),
+    fs = require('fs'),
+    gulp = require('gulp-help')(require('gulp')),
+    gulpSequence = require('gulp-sequence'),
+    PluginError = require('plugin-error');
 
-var gulp = require('gulp-help')(require('gulp'));
-var gulpSequence = require('gulp-sequence');
-var PluginError = require('plugin-error');
-var cmd = require('node-cmd');
-var config = require('./config.json');
 
 /**
- * await Job Callback
+ * await Job Callback - Callback is made without error if Job completes with 
+ * CC < MaxRC in the allotted time
  * @callback awaitJobCallback
  * @param {Error} err 
  */
 
 /**
-* Polls jobId. Callback is made without error if Job completes with CC < MaxRC in the allotted time
-* @param {string}           jobId     jobId to check the completion of
-* @param {number}           [maxRC=0] maximum allowable return code
-* @param {awaitJobCallback} callback  function to call after completion
-* @param {number}           tries     max attempts to check the completion of the job
-* @param {number}           wait      wait time in ms between each check
-*/
-function awaitJobCompletion(jobId, maxRC=0, callback, tries = 30, wait = 1000) {
-  if (tries > 0) {
-      sleep(wait);
-      cmd.get(
-      'zowe jobs view job-status-by-jobid ' + jobId + ' --rff retcode --rft string',
-      function (err, data, stderr) {
-          retcode = data.trim();
-          //retcode should either be null of in the form CC nnnn where nnnn is the return code
-          if (retcode == "null") {
-            awaitJobCompletion(jobId, maxRC, callback, tries - 1, wait);
-          } else if (retcode.split(" ")[1] <= maxRC) {
-            callback(null);
-          } else {
-            callback(new Error(jobId + " had a return code of " + retcode + " exceeding maximum allowable return code of " + maxRC));
-          }
-      }
-      );
-  } else {
-      callback(new Error(jobId + " timed out."));
-  }
-}
-
-/**
 * Runs command and calls back without error if successful
-* @param {string}           command   command to run
-* @param {awaitJobCallback} callback  function to call after completion
+* @param {string}           command           command to run
+* @param {string}           dir               directory to log output to
+* @param {awaitJobCallback} callback          function to call after completion
+* @param {Array}            [expectedOutputs] array of expected strings to be in the output
 */
-function simpleCommand(command, callback){
+function simpleCommand(command, dir, callback, expectedOutputs){
   cmd.get(command, function(err, data, stderr) { 
+    //log output
+    var content = "Error:\n" + err + "\n" + "StdErr:\n" + stderr + "\n" + "Data:\n" + data;
+    writeToFile(dir, content);
+    
     if(err){
       callback(err);
     } else if (stderr){
       callback(new Error("\nCommand:\n" + command + "\n" + stderr + "Stack Trace:"));
+    } else if(typeof expectedOutputs !== 'undefined'){
+      verifyOutput(data, expectedOutputs, callback);
     } else {
       callback();
     }
@@ -68,82 +39,108 @@ function simpleCommand(command, callback){
 }
 
 /**
-* Submits job and verifies successful completion
-* @param {string}           ds        data-set to submit
-* @param {number}           [maxRC=0] maximum allowable return code
-* @param {awaitJobCallback} callback  function to call after completion
+* Submits job, verifies successful completion, stores output
+* @param {string}           ds                  data-set to submit
+* @param {string}           [dir="job-archive"] local directory to download spool to
+* @param {number}           [maxRC=0]           maximum allowable return code
+* @param {awaitJobCallback} callback            function to call after completion
 */
-function submitJob(ds, maxRC=0, callback){
-  var command = 'zowe jobs submit data-set "' + ds + '" --rff jobid --rft string'
+function submitJobAndDownloadOutput(ds, dir="job-archive", maxRC=0, callback){
+  var command = 'zowe jobs submit data-set "' + ds + '" -d ' + dir + " --rfj";
   cmd.get(command, function(err, data, stderr) { 
+    //log output
+    var content = "Error:\n" + err + "\n" + "StdErr:\n" + stderr + "\n" + "Data:\n" + data;
+    writeToFile("command-archive/job-submission", content);
+
     if(err){
       callback(err);
     } else if (stderr){
       callback(new Error("\nCommand:\n" + command + "\n" + stderr + "Stack Trace:"));
     } else {
-      // Strip unwanted whitespace/newline
-      var jobId = data.trim();
-      
-      // Await the jobs completion
-      awaitJobCompletion(jobId, maxRC, function(err){
-        if(err){
-          callback(err);
-        } else{
-          callback();
-        }
-      });
+      data = JSON.parse(data).data;
+      retcode = data.retcode;
+
+      //retcode should be in the form CC nnnn where nnnn is the return code
+      if (retcode.split(" ")[1] <= maxRC) {
+        callback(null);
+      } else {
+        callback(new Error("Job did not complete successfully. Additional diagnostics:" + JSON.stringify(data,null,1)));
+      }
     }
-   });
+  });
 }
 
 /**
- * Sleep function.
- * @param {number} ms Number of ms to sleep
- */
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+* Runs command and calls back without error if successful
+* @param {string}           data            command to run
+* @param {Array}            expectedOutputs array of expected strings to be in the output
+* @param {awaitJobCallback} callback        function to call after completion
+*/
+function verifyOutput(data, expectedOutputs, callback){
+  expectedOutputs.forEach(function(output){
+    if (!data.includes(output)) {
+      callback(new Error(output + " not found in response: " + data));
+    }
+  });
+  // Success
+  callback();
+}
+
+/**
+* Writes content to files
+* @param {string}           dir     directory to write content to
+* @param {string}           content content to write
+*/
+function writeToFile(dir, content) {
+  var d = new Date(),
+      filePath = dir + "/" + d.toISOString() + ".txt";
+
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  };
+  
+  fs.writeFileSync(filePath, content, function(err) {
+    if(err) {
+      return console.log(err);
+    }
+  });
 }
 
 gulp.task('bind-n-grant', 'Bind & Grant Job', function (callback) {
   var ds = config.bindGrantJCL;
-  submitJob(ds, 4, callback);
+  submitJobAndDownloadOutput(ds, "job-archive/bind-n-grant", 4, callback);
 });
 
 gulp.task('build-cobol', 'Build COBOL element', function (callback) {
-  var endevor = (typeof process.env.ENDEVOR === "undefined") ? "" : process.env.ENDEVOR,
-      command = "zowe endevor generate element " + config.testElement + " --type COBOL --override-signout --maxrc 0 --stage-number 1 " + endevor;
+  var command = "zowe endevor generate element " + config.testElement + " --type COBOL --override-signout --maxrc 0 --stage-number 1";
 
-  simpleCommand(command, callback);
+  simpleCommand(command, "command-archive/build-cobol", callback);
 });
 
 gulp.task('build-lnk', 'Build LNK element', function (callback) {
-  var endevor = (typeof process.env.ENDEVOR === "undefined") ? "" : process.env.ENDEVOR,
-      command = "zowe endevor generate element " + config.testElement + " --type LNK --override-signout --maxrc 0 --stage-number 1 " + endevor;
+  var command = "zowe endevor generate element " + config.testElement + " --type LNK --override-signout --maxrc 0 --stage-number 1";
 
-  simpleCommand(command, callback);
+  simpleCommand(command, "command-archive/build-lnk", callback);
 });
 
 gulp.task('build', 'Build Program', gulpSequence('build-cobol','build-lnk'));
 
 gulp.task('cics-refresh', 'Refresh(new-copy) ' + config.cicsProgram + ' CICS Program', function (callback) {
-  var cics = (typeof process.env.CICS === "undefined") ? "" : process.env.CICS,
-      command = 'zowe cics refresh program "' + config.cicsProgram + '" ' + cics;
+  var command = 'zowe cics refresh program "' + config.cicsProgram + '"';
 
-  simpleCommand(command, callback);
+  simpleCommand(command, "command-archive/cics-refresh", callback);
 });
 
 gulp.task('copy-dbrm', 'Copy DBRMLIB to test environment', function (callback) {
-  var fmp = (typeof process.env.FMP === "undefined") ? "" : process.env.FMP,
-      command = 'zowe file-master-plus copy data-set "' + config.devDBRMLIB + '" "' + config.testDBRMLIB + '" -m ' + config.testElement + ' ' + fmp;
+  var command = 'zowe file-master-plus copy data-set "' + config.devDBRMLIB + '" "' + config.testDBRMLIB + '" -m ' + config.testElement;
 
-  simpleCommand(command, callback);
+  simpleCommand(command, "command-archive/copy-dbrm", callback);
 });
 
 gulp.task('copy-load', 'Copy LOADLIB to test environment', function (callback) {
-  var fmp = (typeof process.env.FMP === "undefined") ? "" : process.env.FMP,
-      command = 'zowe file-master-plus copy data-set "' + config.devLOADLIB + '" "' + config.testLOADLIB + '" -m ' + config.testElement + ' ' + fmp;
+  var command = 'zowe file-master-plus copy data-set "' + config.devLOADLIB + '" "' + config.testLOADLIB + '" -m ' + config.testElement;
 
-  simpleCommand(command, callback);
+  simpleCommand(command, "command-archive/copy-load", callback);
 });
 
 gulp.task('deploy', 'Deploy Program', gulpSequence('copy-dbrm','copy-load','bind-n-grant','cics-refresh'));
