@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@types/handlebars": "^4.1.0",
-    "handlebars": "^4.1.2",
+    "handlebars": "^4.3.0",
     "nodemon": "^1.18.10",
     "ts-node": "^8.3.0",
     "typescript": "^3.5.3"
