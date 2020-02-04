@@ -14,7 +14,7 @@
     "type": "git"
   },
   "author": "gcartier@br.ibm.com",
-  "license": "ISC",
+  "license": "EPL-2.0",
   "devDependencies": {
     "@types/config": "0.0.34",
     "@types/mustache": "^0.8.32",
