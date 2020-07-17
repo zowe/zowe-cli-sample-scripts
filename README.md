@@ -15,3 +15,4 @@ The `use_cases` directory has self-contained examples of various common use case
 
 - [SonarQube Data Set Analysis](./use_cases/sonarqube_datasets/)
 - [Continuous Integration Pipeline](./use_cases/CI_pipeline/)
+- [Profile Automation](./use_cases/Profile-Automation/)
