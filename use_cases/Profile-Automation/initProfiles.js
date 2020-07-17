@@ -91,7 +91,8 @@ function createAndSetProfiles(user, pass, callback){
 
   createAndSetProfiles(user, pass, function(err){
     if(err){
-      console.log(err);
+      console.error(err);
+      process.exit(1);
     } else {
       console.log("Profiles successfully initialized.")
     }
