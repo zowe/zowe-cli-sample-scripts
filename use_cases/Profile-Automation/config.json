@@ -1,0 +1,13 @@
+{
+    "endevorHost": "myLPAR.com",
+    "endevorPort": 6000,
+    "endevorProtocol": "https",
+    "endevorRejectUnauthorized": "true",
+    "endevorLocationInstance": "ENDEVOR",
+    "endevorLocationEnvironment": "DEV",
+    "endevorLocationSystem": "MARBLES",
+    "endevorLocationSubsystem": "MARBLES",
+    "zosmfHost": "myLPAR.com",
+    "zosmfPort": "443",
+    "zosmfRejectUnauthorized": "true"
+}
