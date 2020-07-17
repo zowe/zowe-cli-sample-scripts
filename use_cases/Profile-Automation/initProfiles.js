@@ -39,8 +39,8 @@ function simpleCommand(command, callback){
 
 /**
  * Submits multiple simple commands
- * @param {string[]}         commands Array of commands
- * @param {awaitJobCallback} callback function to call after completion
+ * @param {string[]}        commands Array of commands
+ * @param {requestCallback} callback function to call after completion
  */
 function submitMultipleCommands(commands, callback){
     if(commands.length>0){
