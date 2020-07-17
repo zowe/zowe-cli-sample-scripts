@@ -1,0 +1,2 @@
+# Profile Automation
+This project houses example automation for easily setting up Zowe CLI profiles while working on a particular project. This makes onboarding onto a project as simple as `git clone`, `npm install`, `npm run init`, enter username & password. `config.json` manages service profile information for this project and `initProfiles.js` is the script that sets up the local CLI environment for working on this particular project. 

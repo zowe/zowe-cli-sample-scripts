@@ -1,0 +1,14 @@
+{
+  "name": "profile-automation",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "init": "node ./initProfiles.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "readline-sync": "^1.4.10"
+  }
+}
