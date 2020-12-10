@@ -7,7 +7,7 @@
     "init": "node ./initProfiles.js"
   },
   "author": "",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "devDependencies": {
     "readline-sync": "^1.4.10"
   }
