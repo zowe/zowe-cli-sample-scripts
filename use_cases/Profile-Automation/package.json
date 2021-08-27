@@ -4,11 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "init": "node ./initProfiles.js"
+    "init": "node ./initProfiles.js",
+    "lint": "eslint ./initProfiles.js"
   },
   "author": "",
   "license": "Apache-2.0",
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.29.0",
+    "@typescript-eslint/parser": "^4.29.0",
+    "eslint": "^7.32.0",
+    "eslint-plugin-jest": "^24.4.0",
+    "eslint-plugin-unused-imports": "^1.1.2",
     "readline-sync": "^1.4.10"
   }
 }
