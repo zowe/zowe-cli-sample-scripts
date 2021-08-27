@@ -5,7 +5,8 @@
   "scripts": {
     "download": "node scripts/zowe_download.js",
     "sonar": "sonar-scanner && npm run cleanup",
-    "cleanup": "node scripts/cleanup_source.js"
+    "cleanup": "node scripts/cleanup_source.js",
+    "lint": "eslint scripts/*.js"
   },
   "keywords": [
     "SonarQube",
@@ -14,5 +15,12 @@
     "Mainframe"
   ],
   "author": "Zowe CLI Team",
-  "license": "EPL-2.0"
+  "license": "EPL-2.0",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.29.0",
+    "@typescript-eslint/parser": "^4.29.0",
+    "eslint": "^7.32.0",
+    "eslint-plugin-jest": "^24.4.0",
+    "eslint-plugin-unused-imports": "^1.1.2"
+  }
 }

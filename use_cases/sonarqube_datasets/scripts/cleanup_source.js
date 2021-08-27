@@ -8,9 +8,9 @@
  * Copyright Contributors to the Zowe Project.                                           *
  */
 
-/******************************************************************** 
+/********************************************************************
  *   This script is intended to be executed from the command line   *
- *   at your terminal or in a Jenkins (or other CI/CD tool)         * 
+ *   at your terminal or in a Jenkins (or other CI/CD tool)         *
  *   pipeline.                                                      *
  *                                                                  *
  *   The script will remove the zossrc/ directory.                  *
@@ -22,9 +22,9 @@ try {
     const sourceDir = path.join(__dirname, "..", "zossrc");
     console.log("Removing 'zossrc' directory...");
     rmDirR(sourceDir);
-    console.log("+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+")
+    console.log("+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+");
     console.log("| 'zossrc' directory deleted! |");
-    console.log("+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+")
+    console.log("+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+");
     console.log("");
 } catch (err) {
     console.error("ERROR!!! Unable to remove source directory 'zossrc'. Please delete manually!");
