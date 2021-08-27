@@ -3,3 +3,4 @@ endevor-report*.txt
 job-archive/
 mochawesome-report/
 node_modules/
+package-lock.json
