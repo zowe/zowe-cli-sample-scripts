@@ -8,7 +8,8 @@
     "watch": "node ./env_scripts/lib/watch.js",
     "upload": "node ./env_scripts/lib/upload.js",
     "load-def": "node ./env_scripts/lib/load-event-definitions.js",
-    "send-sms": "node ./env_scripts/lib/twilio-notification.js"
+    "send-sms": "node ./env_scripts/lib/twilio-notification.js",
+    "lint": "eslint config/*.ts env_scripts/src/*.ts"
   },
   "repository": {
     "type": "git"
@@ -19,7 +20,12 @@
     "@types/config": "0.0.34",
     "@types/mustache": "^0.8.32",
     "@types/node": "^11.10.5",
+    "@typescript-eslint/eslint-plugin": "^4.29.0",
+    "@typescript-eslint/parser": "^4.29.0",
     "config": "^3.0.1",
+    "eslint": "^7.32.0",
+    "eslint-plugin-jest": "^24.4.0",
+    "eslint-plugin-unused-imports": "^1.1.2",
     "mustache": "^3.0.1"
   },
   "dependencies": {

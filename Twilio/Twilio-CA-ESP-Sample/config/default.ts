@@ -53,4 +53,4 @@ export default {
         "originPhone": "",
         "targetPhone": ""
     }
-}
+};
