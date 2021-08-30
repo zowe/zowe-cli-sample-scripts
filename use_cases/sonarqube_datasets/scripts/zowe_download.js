@@ -8,9 +8,9 @@
  * Copyright Contributors to the Zowe Project.                                           *
  */
 
-/******************************************************************** 
+/********************************************************************
  *   This script is intended to be executed from the command line   *
- *   at your terminal or in a Jenkins (or other CI/CD tool)         * 
+ *   at your terminal or in a Jenkins (or other CI/CD tool)         *
  *   pipeline.                                                      *
  *                                                                  *
  *   It requires that you pass the following arguments:             *
@@ -25,7 +25,7 @@
  *                                                                  *
  *   The script parses the input, creates the local directory       *
  *   for the source files and downloads all members from each PDS   *
- *   specified using Zowe CLI.                                      *       
+ *   specified using Zowe CLI.                                      *
  *                                                                  *
  *   If an error is detected, the script will exit immediately with *
  *   an exit code of 1.                                             *
@@ -35,8 +35,8 @@ const os = require("os");
 const path = require("path");
 const fs = require("fs");
 
-/******************************************************************** 
- *   Process the script input arguments                             *                              
+/********************************************************************
+ *   Process the script input arguments                             *
  ********************************************************************/
 
 // Set of required script arguments
@@ -55,27 +55,27 @@ const missingArgs = requiredArgs.filter((value) => !(value in args));
 
 // If there are missing arguments, report the missing args and exit.
 if (missingArgs.length > 0) {
-    console.error(`Missing Script Arguments:`)
+    console.error(`Missing Script Arguments:`);
     console.error(missingArgs);
     console.error("");
     process.exit(1);
 }
 
-/******************************************************************** 
- *   Create the local src directory (target of download)            *                              
+/********************************************************************
+ *   Create the local src directory (target of download)            *
  ********************************************************************/
 
-// Create the src directory 
+// Create the src directory
 const srcDir = path.join(__dirname, "..", "zossrc");
 if (!fs.existsSync(srcDir)) {
     fs.mkdirSync(srcDir);
 }
 
-/******************************************************************** 
- *   Download the members using Zowe CLI                            *                              
+/********************************************************************
+ *   Download the members using Zowe CLI                            *
  ********************************************************************/
 
-// If on Windows, append ".cmd" to the command 
+// If on Windows, append ".cmd" to the command
 const zoweBin = os.platform() === "win32" ? "zowe.cmd" : "zowe";
 
 // Read the properties file
@@ -87,7 +87,7 @@ try {
     process.exit(1);
 }
 
-// Iterate through each source type in the 
+// Iterate through each source type in the
 Object.keys(properties.src).forEach((srcType) => {
     properties.src[srcType].forEach((ds) => {
 
@@ -99,7 +99,7 @@ Object.keys(properties.src).forEach((srcType) => {
             "--port", properties.zosmfPort,
             "--reject-unauthorized", "false",
             "--extension", srcType,
-            "--max-concurrent-requests", 10];
+            "--max-concurrent-requests", 10]; // eslint-disable-line @typescript-eslint/no-magic-numbers
         const fullCmd = command.concat(options);
 
         // Issue the zowe files download all-members command
