@@ -38,7 +38,7 @@ module.exports = {
     "plugins": [
         "@typescript-eslint",
         "jest",
-        "unused-imports"
+        "unused-imports",
     ],
     "rules": {
         "max-len": ["warn", 150],
