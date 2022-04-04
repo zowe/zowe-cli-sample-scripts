@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "node utils/updateLicense.js",
-    "lint": "eslint utils/updateLicense.js"
+    "lint": "eslint \"**/*.ts\" \"**/*.js\" --ignore-pattern \"**/.eslintrc.js\""
   },
   "repository": {
     "type": "git",

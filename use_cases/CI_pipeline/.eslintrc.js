@@ -2,7 +2,8 @@ module.exports = {
     "root": true,
     "env": {
         "es2021": true,
-        "node": true
+        "node": true,
+        "jest/globals": true
     },
     "extends": [
         "eslint:recommended",

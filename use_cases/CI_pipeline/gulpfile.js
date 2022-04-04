@@ -13,8 +13,8 @@ var cmd = require('node-cmd'),
     config = require('./config.json'),
     fs = require('fs'),
     gulp = require('gulp-help')(require('gulp')),
-    gulpSequence = require('gulp-sequence'),
-    PluginError = require('plugin-error');
+    gulpSequence = require('gulp-sequence');
+// var PluginError = require('plugin-error');
 
 /**
  * await Job Callback - Callback is made without error if Job completes with
