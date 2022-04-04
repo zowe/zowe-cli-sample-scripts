@@ -15,20 +15,14 @@ module.exports = {
     "overrides": [
         {
             "extends": [
-                "plugin:jest/recommended"
+                "plugin:mocha/recommended"
             ],
             "files": [
-                "**/__tests__/**/*.ts"
+                "test/*.js"
             ],
             "rules": {
                 "@typescript-eslint/no-magic-numbers": "off",
-                "jest/expect-expect": ["warn", {
-                    "assertFunctionNames": ["expect*", "**.*expect*"]
-                }],
-                "jest/no-conditional-expect": "off",
-                "jest/no-standalone-expect": "off",
-                "jest/no-try-expect": "off",
-                "unused-imports/no-unused-vars": "off"
+                "mocha/no-setup-in-describe": "off"
             }
         }
     ],
@@ -40,6 +34,7 @@ module.exports = {
     "plugins": [
         "@typescript-eslint",
         "jest",
+        "mocha",
         "unused-imports"
     ],
     "rules": {

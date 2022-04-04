@@ -172,7 +172,7 @@ describe('Marbles', function () {
         const COLOR = config.marbleColor;
 
         // Delete the marble to reset inventory to zero (Delete will be tested later)
-        beforeAll(function (done) {
+        before(function (done) {
             deleteMarble(COLOR, function () {
                 done();
             });

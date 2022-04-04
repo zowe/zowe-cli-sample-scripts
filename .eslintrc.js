@@ -39,6 +39,7 @@ module.exports = {
     "plugins": [
         "@typescript-eslint",
         "jest",
+        "mocha",
         "unused-imports",
     ],
     "rules": {
