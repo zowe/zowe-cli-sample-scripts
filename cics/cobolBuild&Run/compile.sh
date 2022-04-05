@@ -10,18 +10,6 @@
 #                                                                                       #
 #
 
-
-#
-# This program and the accompanying materials are made available under the terms of the #
-# Eclipse Public License v2.0 which accompanies this distribution, and is available at  #
-# https://www.eclipse.org/legal/epl-v20.html                                            #
-#                                                                                       #
-# SPDX-License-Identifier: EPL-2.0                                                      #
-#                                                                                       #
-# Copyright Contributors to the Zowe Project.                                           #
-#
-
-
 set +x
 
 tries=20
@@ -38,12 +26,12 @@ function submitJCL () {
     retcode=`zowe jobs view job-status-by-jobid $jobid --rff retcode --rft string`
     echo $retcode
     echo ''
-    
+
     counter=0
     while (("$counter" < $tries)) && [ "$retcode" == "null" ]; do
         counter=$((counter + 1))
         sleep $wait
-        
+
         echo 'zowe jobs view job-status-by-jobid' $jobid '--rff retcode --rft string'
         retcode=`zowe jobs view job-status-by-jobid $jobid --rff retcode --rft string`
         echo $retcode

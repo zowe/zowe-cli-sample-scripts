@@ -10,23 +10,10 @@
 #                                                                                       #
 #
 
-
-#
-# This program and the accompanying materials are made available under the terms of the #
-# Eclipse Public License v2.0 which accompanies this distribution, and is available at  #
-# https://www.eclipse.org/legal/epl-v20.html                                            #
-#                                                                                       #
-# SPDX-License-Identifier: EPL-2.0                                                      #
-#                                                                                       #
-# Copyright Contributors to the Zowe Project.                                           #
-#
-
-
-
 #submit a simple  job using zowe scripts...
 #----------------------------------------------------------------------------------------
 #                                   NOTES
-# IFS - internal Field seperator. default is SPACE/TAB/newline... 
+# IFS - internal Field seperator. default is SPACE/TAB/newline...
 # sample output - JOB08536 CC 0000 Z407281 OUTPUT
 #                                                 ----avi.vzm05 -initial test.
 #----------------------------------------------------------------------------------------
@@ -40,7 +27,7 @@ read jobnum dd retcode jobname status <<< $output;
 #retcode=$(echo $output |cut -c4-7)
 #-eq does integer compare, with retcode as ERROR, it would fail.
 
-if [ $retcode = 0004 ] || [ $retcode = 0000 ]   
+if [ $retcode = 0004 ] || [ $retcode = 0000 ]
 then
     echo "${jobname}(${jobnum}) completed successfully with return code ${retcode}"
 else

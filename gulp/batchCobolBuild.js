@@ -10,8 +10,6 @@
  */
 
 var gulp = require('gulp-help')(require('gulp'));
-// var exec = require('child_process').exec;
-// var PluginError = require('plugin-error');
 var cmd = require('node-cmd');
 
 /**
