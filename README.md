@@ -4,11 +4,12 @@ This repository contains some sample scripts that utilize various components of 
 
 ## Components
 
-Here are some of the components that can be demoed using the scipts in this repository.
+Here are some of the components that can be demoed using the scripts in this repository.
 
 ### Core CLI
 
 1. [JENKINS: Submit a job and wait for it to complete](./Jenkins/Simple%20Pipeline/README.md)
+2. [PYTHON: pyzowe - Zowe CLI Convenience Wrapper Function for Python](/python/pyzowe/README.md)
 
 ## Use Cases
 The `use_cases` directory has self-contained examples of various common use cases implemented with Zowe CLI.
