@@ -77,7 +77,7 @@ ALU ($username) NAME('User Created with Zowe Script')
 ALU ($username) TSO(SIZE(00128000))
 ALU ($username) OPERPARM(AUTH(USE) MFORM(S M) ROUTCODE(2))
 ALU ($username) OPERPARM(UD(YES) STORAGE(1)) UACC(NONE)
-ALU ($username) PASSWORD(WELCOME) NOEXPIRED
+ALU ($username) PASSWORD(WELCOME)
 PASSWORD USER($username) INTERVAL(186)
 ADDSD ('$username.**') UACC(NONE)
 PERMIT '$username.**'     ACCESS(READ)  ID(ZLP$system)
