@@ -1,0 +1,86 @@
+{
+  "name": "sample-vsce",
+  "displayName": "sample-vsce",
+  "description": "Sample VSCode Extension forked from the menu-item-sample on the Zowe Explorer VSCode repository",
+  "version": "0.0.1",
+  "publisher": "Zowe",
+  "private": true,
+  "repository": "https://github.com/zowe/zowe-cli-sample-scripts/client-event-handling/sample-vsce",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "sample-vsce.subscribe",
+        "title": "Subscribe"
+      },
+      {
+        "command": "sample-vsce.unsubscribe",
+        "title": "Unsubscribe"
+      },
+      {
+        "command": "sample-vsce.emit",
+        "title": "Emit"
+      }
+    ],
+    "menus": {
+      "view/item/context": [
+        {
+          "when": "view =~ /^zowe\\./",
+          "command": "sample-vsce.subscribe",
+          "group": "100_zowe_menuItemSample@0"
+        },
+        {
+          "when": "view =~ /^zowe\\./",
+          "command": "sample-vsce.unsubscribe",
+          "group": "100_zowe_menuItemSample@0"
+        },
+        {
+          "when": "view =~ /^zowe\\./",
+          "command": "sample-vsce.emit",
+          "group": "100_zowe_menuItemSample@0"
+        }
+      ]
+    }
+  },
+  "extensionDependencies": [
+    "Zowe.vscode-extension-for-zowe"
+  ],
+  "resolutions": {
+    "@zowe/imperative": "https://gitpkg.now.sh/zowe/zowe-cli/packages/imperative?f2fe2609361f1a2cecd230282deb70d701510966"
+  },
+  "scripts": {
+    "preinstall": "rimraf node_modules/@zowe yarn.lock || true",
+    "postinstall": "rimraf yarn.lock",
+    "vscode:prepublish": "yarn run compile",
+    "build:imp": "node res/compileImperative.mjs",
+    "compile": "npm run build:imp && tsc -p ./",
+    "build": "tsc -p ./",
+    "lint": "eslint \"src/**/*.ts\"",
+    "watch": "npm run build:imp && tsc -watch -p ./"
+  },
+  "dependencies": {
+    "@zowe/zowe-explorer-api": "^3.0.0-next.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/jquery": "^3.5.29",
+    "@types/node": "^16.18.34",
+    "@types/vscode": "^1.53.2",
+    "@typescript-eslint/eslint-plugin": "^5.42.0",
+    "@typescript-eslint/parser": "^5.42.0",
+    "eslint": "^8.26.0",
+    "rimraf": "^5.0.5",
+    "stream-to-string": "^1.2.1",
+    "typescript": "^5.1.3",
+    "uuid": "^9.0.1"
+  }
+}
