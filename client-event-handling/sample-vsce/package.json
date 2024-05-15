@@ -55,7 +55,7 @@
     "Zowe.vscode-extension-for-zowe"
   ],
   "resolutions": {
-    "@zowe/imperative": "https://gitpkg.now.sh/zowe/zowe-cli/packages/imperative?f2fe2609361f1a2cecd230282deb70d701510966"
+    "@zowe/imperative": "https://gitpkg.now.sh/zowe/zowe-cli/packages/imperative?ed5d4684f12c5883b7c766ab20317a551f939701"
   },
   "scripts": {
     "preinstall": "rimraf node_modules/@zowe yarn.lock || true",
