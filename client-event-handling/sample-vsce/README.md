@@ -19,6 +19,12 @@ In "extension.ts" many commands are registered which run when the menu item is c
     "@zowe/imperative": "https://gitpkg.now.sh/zowe/zowe-cli/packages/imperative?7730aba8a3344230661722ad9bcf09605f2adcc7"
   },
 ```
+OR switch the imperative file path to your locally built, working version
+```jsonc
+  "resolutions": {
+    "@zowe/imperative": "file:../../../zowe-cli/packages/imperative"
+  },
+```
 
 ## Screenshots
 
