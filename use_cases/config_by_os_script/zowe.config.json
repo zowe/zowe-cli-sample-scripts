@@ -1,0 +1,105 @@
+{
+    "$schema": "./zowe.schema.json",
+    "profiles": {
+        "tso": {
+            "type": "tso",
+            "properties": {
+                "account": "",
+                "codePage": "1047",
+                "logonProcedure": "IZUFPROC"
+            },
+            "secure": []
+        },
+        "ssh": {
+            "type": "ssh",
+            "properties": {
+                "port": 22
+            },
+            "secure": []
+        },
+        "endevor": {
+            "type": "endevor",
+            "properties": {
+                "port": 1234,
+                "protocol": "https",
+                "host": "YourEndevorSystem.YourCompany.com"
+            },
+            "secure": [
+                "user",
+                "password"
+            ]
+        },
+        "endevor-location": {
+            "type": "endevor-location",
+            "properties": {
+                "instance": "ENDEVOR",
+                "environment": "DEV",
+                "system": "YourGreatApp",
+                "subsystem": "YourNextFix",
+                "type": "",
+                "stageNumber": "1",
+                "maxrc": 8
+            },
+            "secure": []
+        },
+        "base": {
+            "type": "base",
+            "properties": {
+                "host": "",
+                "rejectUnauthorized": false
+            },
+            "secure": [
+                "user",
+                "password"
+            ]
+        },
+        "zosmf_dev": {
+            "type": "zosmf",
+            "properties": {
+                "host": "YourDevSystem.YourCompany.com",
+                "port": 1234
+            }
+        },
+        "zosmf_qa": {
+            "type": "zosmf",
+            "host": "YourQASystem.YourCompany.com",
+            "properties": {
+                "port": 5678
+            }
+        },
+        "zosmf_prod": {
+            "type": "zosmf",
+            "host": "YourProductionSystem.YourCompany.com",
+            "properties": {
+                "port": 9012
+            }
+        },
+        "base_apiml": {
+            "type": "base",
+            "properties": {
+                "host": "YourApimlSystem.YourCompany.com",
+                "port": 12345,
+                "rejectUnauthorized": false
+            },
+            "secure": [
+                "user",
+                "password"
+            ]
+        },
+        "zosmf_thru_apiml": {
+            "type": "zosmf",
+            "properties": {
+                "basePath": "ibmzosmf/api/v1"
+            }
+        }
+    },
+    "defaults": {
+        "zosmf": "zosmf_dev",
+        "tso": "tso",
+        "ssh": "ssh",
+        "endevor": "endevor",
+        "endevor-location": "endevor-location",
+        "base": "base"
+    },
+    "autoStore": true
+}
