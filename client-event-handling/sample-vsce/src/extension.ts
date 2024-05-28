@@ -15,130 +15,124 @@ import * as imperative from "@zowe/imperative";
 
 
 export function activate(context: vscode.ExtensionContext) {
+    // TO DO:
+    // [] zowe watcher (subscribe and unsubscribe)
+    // [] custom watcher (subscribe and unsubscribe)
+    // [] custom emitters (emit)
 
-    const zoweAppWatcher = imperative.EventEmitterManager.getEmitter('Zowe');
-    const customAppWatcher = imperative.EventEmitterManager.getEmitter('customApp');
+    //////////////////////////////////////////////////////////////
+    // Simulated Event Emission
+    //////////////////////////////////////////////////////////////
+    const eventZoweUser = "onVaultChanged";
+    const eventZoweShared = "onCredentialManagerChanged";
+    const eventExtenderUser = "extenderUserEvent";
+    const eventExtenderShared = "extenderSharedEvent";
 
-    ////////////////////////////[U]///////////////////////////////
-    // [U]ser event - "onVaultChanged"
-    // zoweAppWatcher.subscribeUser('onVaultChanged', callback);
-    // zoweAppWatcher.emitEvent('onVaultChanged');
-    // zoweAppWatcher.unsubscribe('onVaultChanged');
-    /////////////////////////////////////////////////////////////
-    let userEmits = 0;
-    const eventU = "onVaultChanged";
-    // subscribe
-    const disposableUS = vscode.commands.registerCommand("menu-item-sample.subscribeU", (node: IZoweTreeNode) => {
-        const watcherU = zoweAppWatcher.subscribeUser(eventU, () => {
-            vscode.window.showInformationMessage("Registered callback for emission event [U] - number: " + userEmits++);
-        });
-        vscode.window.showInformationMessage("Subscribed[U]");
-        context.subscriptions.push(vscode.Disposable.from({dispose: watcherU.close}));
+    const zoweEmitter = imperative.EventOperator.getEmitter();
+    const extenderEmitter = imperative.EventOperator.getEmitter('customApp');
+
+    let zoweUserEmits = 0, zoweSharedEmits = 0, extenderUserEmits = 0, extenderSharedEmits = 0;
+
+    const disposableZUE = vscode.commands.registerCommand("menu-item-sample.emitZU", (node: IZoweTreeNode) => {
+        zoweEmitter.emitEvent(eventZoweUser);
+        vscode.window.showInformationMessage("Emission Event [ZU] - number: " + zoweUserEmits++);
     });
-    // emit
-    const disposableUE = vscode.commands.registerCommand("menu-item-sample.emitU", (node: IZoweTreeNode) => {
-        zoweAppWatcher.emitEvent(eventU);
-        vscode.window.showInformationMessage("Emission event [U] - number: " + userEmits++);
+
+    const disposableZSE = vscode.commands.registerCommand("menu-item-sample.emitZS", (node: IZoweTreeNode) => {
+        zoweEmitter.emitEvent(eventZoweShared);
+        vscode.window.showInformationMessage("Emission event [ZS]- number: " + zoweSharedEmits++);
+    });
+
+    const disposableEUE = vscode.commands.registerCommand("menu-item-sample.emitEU", (node: IZoweTreeNode) => {
+        extenderEmitter.emitEvent(eventExtenderUser);
+        vscode.window.showInformationMessage("Emission event [EU]- number: " + extenderUserEmits++);
+    });
+
+    const disposableESE = vscode.commands.registerCommand("menu-item-sample.emitES", (node: IZoweTreeNode) => {
+        extenderEmitter.emitEvent(eventExtenderShared);
+        vscode.window.showInformationMessage("Emission event [ES]- number: " + extenderSharedEmits++);
+    });
+
+    //////////////////////////////////////////////////////////////
+    // Subscribe to Zowe Events
+    const zoweWatcher = imperative.EventOperator.getZoweWatcher();
+    //////////////////////////////////////////////////////////////
+
+    // [Z]owe [U]ser event - "onVaultChanged"
+    // subscribe
+    const disposableZUS = vscode.commands.registerCommand("menu-item-sample.subscribeZU", (node: IZoweTreeNode) => {
+        const watcherZU = zoweWatcher.subscribeUser(eventZoweUser, () => {
+            vscode.window.showInformationMessage("Registered callbacks[ZU] - number: " + zoweUserEmits++);
+        });
+        vscode.window.showInformationMessage("Subscribed[ZU]");
+        context.subscriptions.push(vscode.Disposable.from({dispose: watcherZU.close}));
     });
     // unsubscribe
-    const disposableUU = vscode.commands.registerCommand("menu-item-sample.unsubscribeU", (node: IZoweTreeNode) => {
-        zoweAppWatcher.unsubscribe(eventU);
-        userEmits = 0;
+    const disposableZUU = vscode.commands.registerCommand("menu-item-sample.unsubscribeZU", (node: IZoweTreeNode) => {
+        zoweWatcher.unsubscribe(eventZoweUser);
+        zoweUserEmits = 0;
         vscode.window.showInformationMessage("Unsubscribed[U]");
     });
-    // cleanup
-    context.subscriptions.push(disposableUE, disposableUS, disposableUU);
 
 
-    ////////////////////////////////[S]////////////////////////////////////////
-    // [S]hared event - "onCredentialManagerChanged"
-    // zoweAppWatcher.subscribeShared('onCredentialManagerChanged', callback);
-    // zoweAppWatcher.emitEvent('onCredentialManagerChanged');
-    // zoweAppWatcher.unsubscribe('onCredentialManagerChanged');
-    //////////////////////////////////////////////////////////////////////////
-    let sharedEmits = 0;
-    const eventS = "onCredentialManagerChanged";
+    // [Z]owe [S]hared event - "onCredentialManagerChanged"
     // subscribe
-    const disposableSS = vscode.commands.registerCommand("menu-item-sample.subscribeS", (node: IZoweTreeNode) => {
-        const watcherS = zoweAppWatcher.subscribeShared(eventS, () => {
-            vscode.window.showInformationMessage("Registered callback for emission event [S] - number: " + sharedEmits++);
+    const disposableZSS = vscode.commands.registerCommand("menu-item-sample.subscribeS", (node: IZoweTreeNode) => {
+        const watcherZS = zoweWatcher.subscribeShared(eventZoweShared, () => {
+            vscode.window.showInformationMessage("Registered callbacks[ZS] - number: " + zoweSharedEmits++);
         });
-        vscode.window.showInformationMessage("Subscribed[S]");
-        context.subscriptions.push(vscode.Disposable.from({dispose: watcherS.close}));
-    });
-    // emit
-    const disposableSE = vscode.commands.registerCommand("menu-item-sample.emitS", (node: IZoweTreeNode) => {
-        zoweAppWatcher.emitEvent(eventS);
-        vscode.window.showInformationMessage("Emission event [S]- number: " + sharedEmits++);
+        vscode.window.showInformationMessage("Subscribed[ZS]");
+        context.subscriptions.push(vscode.Disposable.from({dispose: watcherZS.close}));
     });
     // unsubscribe
-    const disposableSU = vscode.commands.registerCommand("menu-item-sample.unsubscribeS", (node: IZoweTreeNode) => {
-        zoweAppWatcher.unsubscribe(eventS);
-        sharedEmits = 0;
-        vscode.window.showInformationMessage("Unsubscribed[S]");
+    const disposableZSU = vscode.commands.registerCommand("menu-item-sample.unsubscribeZS", (node: IZoweTreeNode) => {
+        zoweWatcher.unsubscribe(eventZoweShared);
+        zoweSharedEmits = 0;
+        vscode.window.showInformationMessage("Unsubscribed[ZS]");
     });
-    // cleanup
-    context.subscriptions.push(disposableSE, disposableSS, disposableSU);
 
 
-    //////////////////////////////////[CU]/////////////////////////////////////
-    // [C]ustom [U]ser event - "customUserEvent"
-    // customAppWatcher.subscribeShared('onCredentialManagerChanged', callback);
-    // customAppWatcher.emitEvent('onCredentialManagerChanged');
-    // customAppWatcher.unsubscribe('onCredentialManagerChanged');
-    //////////////////////////////////////////////////////////////////////////
-    let custUserEmits = 0;
-    const eventCU = "customUserEvent";
+    //////////////////////////////////////////////////////////////
+    // Subscribe to Extender Events
+    const extenderWatcher = imperative.EventOperator.getWatcher('customApp');
+    //////////////////////////////////////////////////////////////
+
+    // [E]xtender [U]ser event - "extenderUserEvent"
     // subscribe
-    const disposableCUS = vscode.commands.registerCommand("menu-item-sample.subscribeCU", (node: IZoweTreeNode) => {
-        const watcherCU = customAppWatcher.subscribeUser(eventCU, () => {
-            vscode.window.showInformationMessage("Registered callback for emission event [CU] - number: " + custUserEmits++);
+    const disposableEUS = vscode.commands.registerCommand("menu-item-sample.subscribeEU", (node: IZoweTreeNode) => {
+        const watcherEU = extenderWatcher.subscribeUser(eventExtenderUser, () => {
+            vscode.window.showInformationMessage("Registered callbacks [EU] - number: " + extenderUserEmits++);
         });
-        vscode.window.showInformationMessage("Subscribed[CU]");
-        context.subscriptions.push(vscode.Disposable.from({dispose: watcherCU.close}));
-    });
-    // emit
-    const disposableCUE = vscode.commands.registerCommand("menu-item-sample.emitCU", (node: IZoweTreeNode) => {
-        customAppWatcher.emitEvent(eventCU);
-        vscode.window.showInformationMessage("Emission event [CU]- number: " + custUserEmits++);
+        vscode.window.showInformationMessage("Subscribed[EU]");
+        context.subscriptions.push(vscode.Disposable.from({dispose: watcherEU.close}));
     });
     // unsubscribe
-    const disposableCUU = vscode.commands.registerCommand("menu-item-sample.unsubscribeCU", (node: IZoweTreeNode) => {
-        customAppWatcher.unsubscribe(eventCU);
-        custUserEmits = 0;
-        vscode.window.showInformationMessage("Unsubscribed[CU]");
+    const disposableEUU = vscode.commands.registerCommand("menu-item-sample.unsubscribeEU", (node: IZoweTreeNode) => {
+        extenderWatcher.unsubscribe(eventExtenderUser);
+        extenderUserEmits = 0;
+        vscode.window.showInformationMessage("Unsubscribed[EU]");
     });
-    // cleanup
-    context.subscriptions.push(disposableCUE, disposableCUS, disposableCUU);
 
-
-    //////////////////////////////////[CS]////////////////////////////////////
-    // [C]ustom [S]hared events - "customSharedEvent"
-    // customAppWatcher.subscribeShared('onCredentialManagerChanged', callback);
-    // customAppWatcher.emitEvent('onCredentialManagerChanged');
-    // customAppWatcher.unsubscribe('onCredentialManagerChanged');
-    //////////////////////////////////////////////////////////////////////////
-    let custSharedEmits = 0;
-    const eventCS = "customSharedEvent";
+    // [E]ustom [S]hared events - "extenderSharedEvent"
     // subscribe
-    const disposableCSS = vscode.commands.registerCommand("menu-item-sample.subscribeCS", (node: IZoweTreeNode) => {
-        const watcherCUS = customAppWatcher.subscribeUser(eventCS, () => {
-            vscode.window.showInformationMessage("Registered callback for emission event [CS] - number: " + custSharedEmits++);
+    const disposableESS = vscode.commands.registerCommand("menu-item-sample.subscribeCS", (node: IZoweTreeNode) => {
+        const watcherEUS = extenderWatcher.subscribeUser(eventExtenderShared, () => {
+            vscode.window.showInformationMessage("Registered callback for emission event [ES] - number: " + extenderSharedEmits++);
         });
-        vscode.window.showInformationMessage("Subscribed[CS]");
-        context.subscriptions.push(vscode.Disposable.from({dispose: watcherCUS.close}));
-    });
-    // emit
-    const disposableCSE = vscode.commands.registerCommand("menu-item-sample.emitCS", (node: IZoweTreeNode) => {
-        customAppWatcher.emitEvent(eventCS);
-        vscode.window.showInformationMessage("Emission event [CS]- number: " + custSharedEmits++);
+        vscode.window.showInformationMessage("Subscribed[ES]");
+        context.subscriptions.push(vscode.Disposable.from({dispose: watcherEUS.close}));
     });
     // unsubscribe
-    const disposableCSU = vscode.commands.registerCommand("menu-item-sample.unsubscribeCS", (node: IZoweTreeNode) => {
-        customAppWatcher.unsubscribe(eventCS);
-        custSharedEmits = 0;
-        vscode.window.showInformationMessage("Unsubscribed[CS]");
+    const disposableESU = vscode.commands.registerCommand("menu-item-sample.unsubscribeCS", (node: IZoweTreeNode) => {
+        extenderWatcher.unsubscribe(eventExtenderShared);
+        extenderSharedEmits = 0;
+        vscode.window.showInformationMessage("Unsubscribed[ES]");
     });
+
+    //////////////////////////////////////////////////////////////
     // cleanup
-    context.subscriptions.push(disposableCSE, disposableCSS, disposableCSU);
+    context.subscriptions.push(disposableZUE, disposableZUS, disposableZUU);
+    context.subscriptions.push(disposableZSE, disposableZSS, disposableZSU);
+    context.subscriptions.push(disposableEUE, disposableEUS, disposableEUU);
+    context.subscriptions.push(disposableESE, disposableESS, disposableESU);
 }
