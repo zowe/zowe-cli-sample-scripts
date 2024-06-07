@@ -135,7 +135,7 @@
     "Zowe.vscode-extension-for-zowe"
   ],
   "resolutions": {
-    "@zowe/imperative": "https://gitpkg.now.sh/zowe/zowe-cli/packages/imperative?b8a2af66d1428fff6f2fae12376ce3d4c81ab86a"
+    "@zowe/imperative": "https://gitpkg.now.sh/zowe/zowe-cli/packages/imperative?c6264f93ff6729fc4863960759c1a5adda6e8308"
 
   },
   "scripts": {
