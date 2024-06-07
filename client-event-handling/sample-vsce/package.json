@@ -18,114 +18,114 @@
   "contributes": {
     "commands": [
       {
-        "command": "menu-item-sample.emitCS",
-        "title": "Emit[CS]"
+        "command": "menu-item-sample.emitES",
+        "title": "Emit[ES]"
       },
       {
-        "command": "menu-item-sample.subscribeCS",
-        "title": "Subscribe[CS]"
+        "command": "menu-item-sample.subscribeES",
+        "title": "Subscribe[ES]"
       },
       {
-        "command": "menu-item-sample.unsubscribeCS",
-        "title": "Unsubscribe[CS]"
+        "command": "menu-item-sample.unsubscribeES",
+        "title": "Unsubscribe[ES]"
       },
       {
-        "command": "menu-item-sample.emitCU",
-        "title": "Emit[CU]"
+        "command": "menu-item-sample.emitEU",
+        "title": "Emit[EU]"
       },
       {
-        "command": "menu-item-sample.subscribeCU",
-        "title": "Subscribe[CU]"
+        "command": "menu-item-sample.subscribeEU",
+        "title": "Subscribe[EU]"
       },
       {
-        "command": "menu-item-sample.unsubscribeCU",
-        "title": "Unsubscribe[CU]"
+        "command": "menu-item-sample.unsubscribeEU",
+        "title": "Unsubscribe[EU]"
       },
       {
-        "command": "menu-item-sample.emitU",
-        "title": "Emit[U]"
+        "command": "menu-item-sample.emitZU",
+        "title": "Emit[ZU]"
       },
       {
-        "command": "menu-item-sample.subscribeU",
-        "title": "Subscribe[U]"
+        "command": "menu-item-sample.subscribeZU",
+        "title": "Subscribe[ZU]"
       },
       {
-        "command": "menu-item-sample.unsubscribeU",
-        "title": "Unsubscribe[U]"
+        "command": "menu-item-sample.unsubscribeZU",
+        "title": "Unsubscribe[ZU]"
       },
       {
-        "command": "menu-item-sample.emitS",
-        "title": "Emit[S]"
+        "command": "menu-item-sample.emitZS",
+        "title": "Emit[ZS]"
       },
       {
-        "command": "menu-item-sample.subscribeS",
-        "title": "Subscribe[S]"
+        "command": "menu-item-sample.subscribeZS",
+        "title": "Subscribe[ZS]"
       },
       {
-        "command": "menu-item-sample.unsubscribeS",
-        "title": "Unsubscribe[S]"
+        "command": "menu-item-sample.unsubscribeZS",
+        "title": "Unsubscribe[ZS]"
       }
     ],
     "menus": {
       "view/item/context": [
         {
           "when": "view =~ /^zowe\\./",
-          "command": "menu-item-sample.subscribeCS",
+          "command": "menu-item-sample.subscribeES",
           "group": "100_zowe_menuItemSample@0"
         },
         {
           "when": "view =~ /^zowe\\./",
-          "command": "menu-item-sample.emitCS",
+          "command": "menu-item-sample.emitES",
           "group": "100_zowe_menuItemSample@0"
         },
         {
           "when": "view =~ /^zowe\\./",
-          "command": "menu-item-sample.unsubscribeCS",
+          "command": "menu-item-sample.unsubscribeES",
           "group": "100_zowe_menuItemSample@0"
         },
         {
           "when": "view =~ /^zowe\\./",
-          "command": "menu-item-sample.subscribeCU",
+          "command": "menu-item-sample.subscribeEU",
           "group": "100_zowe_menuItemSample@0"
         },
         {
           "when": "view =~ /^zowe\\./",
-          "command": "menu-item-sample.emitCU",
+          "command": "menu-item-sample.emitEU",
           "group": "100_zowe_menuItemSample@0"
         },
         {
           "when": "view =~ /^zowe\\./",
-          "command": "menu-item-sample.unsubscribeCU",
+          "command": "menu-item-sample.unsubscribeEU",
           "group": "100_zowe_menuItemSample@0"
         },
         {
           "when": "view =~ /^zowe\\./",
-          "command": "menu-item-sample.subscribeS",
+          "command": "menu-item-sample.subscribeZS",
           "group": "100_zowe_menuItemSample@0"
         },
         {
           "when": "view =~ /^zowe\\./",
-          "command": "menu-item-sample.emitS",
+          "command": "menu-item-sample.emitZS",
           "group": "100_zowe_menuItemSample@0"
         },
         {
           "when": "view =~ /^zowe\\./",
-          "command": "menu-item-sample.unsubscribeS",
+          "command": "menu-item-sample.unsubscribeZS",
           "group": "100_zowe_menuItemSample@0"
         },
         {
           "when": "view =~ /^zowe\\./",
-          "command": "menu-item-sample.subscribeU",
+          "command": "menu-item-sample.subscribeZU",
           "group": "100_zowe_menuItemSample@0"
         },
         {
           "when": "view =~ /^zowe\\./",
-          "command": "menu-item-sample.emitU",
+          "command": "menu-item-sample.emitZU",
           "group": "100_zowe_menuItemSample@0"
         },
         {
           "when": "view =~ /^zowe\\./",
-          "command": "menu-item-sample.unsubscribeU",
+          "command": "menu-item-sample.unsubscribeZU",
           "group": "100_zowe_menuItemSample@0"
         }
       ]
@@ -135,7 +135,8 @@
     "Zowe.vscode-extension-for-zowe"
   ],
   "resolutions": {
-    "**/@zowe/imperative": "https://gitpkg.now.sh/zowe/zowe-cli/packages/imperative?1eaad246ecff25c7596206930d3df232bd85e58d"
+    "@zowe/imperative": "https://gitpkg.now.sh/zowe/zowe-cli/packages/imperative?cff898474321dd54b168f88133159eb2ae9ca772"
+
   },
   "scripts": {
     "preinstall": "rimraf node_modules/@zowe yarn.lock",
@@ -148,8 +149,7 @@
     "watch": "npm run build:imp && tsc -watch -p ./"
   },
   "dependencies": {
-    "@zowe/zowe-explorer-api": "^3.0.0-next.0",
-    "@zowe/imperative": "https://gitpkg.now.sh/zowe/zowe-cli/packages/imperative?1eaad246ecff25c7596206930d3df232bd85e58d"
+    "@zowe/zowe-explorer-api": "^3.0.0-next.0"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",

@@ -11,14 +11,15 @@
 
 import * as vscode from "vscode";
 import { IZoweTreeNode } from "@zowe/zowe-explorer-api";
-import * as imperative from "@zowe/imperative";
+// import * as imperative from "@zowe/imperative";
+const imperative = require("@zowe/imperative");
 
 
 export function activate(context: vscode.ExtensionContext) {
     // TO DO:
-    // [] zowe watcher (subscribe and unsubscribe)
-    // [] custom watcher (subscribe and unsubscribe)
-    // [] custom emitters (emit)
+    // [x] zowe watcher (subscribe and unsubscribe)
+    // [x] custom watcher (subscribe and unsubscribe)
+    // [x] custom emitters (emit)
 
     //////////////////////////////////////////////////////////////
     // Simulated Event Emission
@@ -28,65 +29,68 @@ export function activate(context: vscode.ExtensionContext) {
     const eventExtenderUser = "extenderUserEvent";
     const eventExtenderShared = "extenderSharedEvent";
 
-    const zoweEmitter = imperative.EventOperator.getEmitter();
-    const extenderEmitter = imperative.EventOperator.getEmitter('customApp');
+    const tryCatch = (cb: Function): any => {
+        try { return cb() } catch (err) { vscode.window.showErrorMessage(JSON.stringify(err)); }
+    }
+    const zoweEmitter = tryCatch(() => imperative.EventOperator.getEmitter("Zowe"));
+    const extenderEmitter = tryCatch(() => imperative.EventOperator.getEmitter('customApp'));
 
     let zoweUserEmits = 0, zoweSharedEmits = 0, extenderUserEmits = 0, extenderSharedEmits = 0;
 
     const disposableZUE = vscode.commands.registerCommand("menu-item-sample.emitZU", (node: IZoweTreeNode) => {
-        zoweEmitter.emitEvent(eventZoweUser);
+        tryCatch(() => zoweEmitter.emitEvent(eventZoweUser));
         vscode.window.showInformationMessage("Emission Event [ZU] - number: " + zoweUserEmits++);
     });
 
     const disposableZSE = vscode.commands.registerCommand("menu-item-sample.emitZS", (node: IZoweTreeNode) => {
-        zoweEmitter.emitEvent(eventZoweShared);
+        tryCatch(() => zoweEmitter.emitEvent(eventZoweShared));
         vscode.window.showInformationMessage("Emission event [ZS]- number: " + zoweSharedEmits++);
     });
 
     const disposableEUE = vscode.commands.registerCommand("menu-item-sample.emitEU", (node: IZoweTreeNode) => {
-        extenderEmitter.emitEvent(eventExtenderUser);
+        tryCatch(() => extenderEmitter.emitEvent(eventExtenderUser));
         vscode.window.showInformationMessage("Emission event [EU]- number: " + extenderUserEmits++);
     });
 
     const disposableESE = vscode.commands.registerCommand("menu-item-sample.emitES", (node: IZoweTreeNode) => {
-        extenderEmitter.emitEvent(eventExtenderShared);
+        tryCatch(() => extenderEmitter.emitEvent(eventExtenderShared));
         vscode.window.showInformationMessage("Emission event [ES]- number: " + extenderSharedEmits++);
     });
 
     //////////////////////////////////////////////////////////////
     // Subscribe to Zowe Events
-    const zoweWatcher = imperative.EventOperator.getZoweWatcher();
+    const zoweWatcher = imperative.EventOperator.getWatcher();
     //////////////////////////////////////////////////////////////
 
     // [Z]owe [U]ser event - "onVaultChanged"
     // subscribe
     const disposableZUS = vscode.commands.registerCommand("menu-item-sample.subscribeZU", (node: IZoweTreeNode) => {
-        const watcherZU = zoweWatcher.subscribeUser(eventZoweUser, () => {
+        const watcherZU = tryCatch(() => zoweWatcher.subscribeUser(eventZoweUser, () => {
             vscode.window.showInformationMessage("Registered callbacks[ZU] - number: " + zoweUserEmits++);
-        });
+        }));
         vscode.window.showInformationMessage("Subscribed[ZU]");
-        context.subscriptions.push(vscode.Disposable.from({dispose: watcherZU.close}));
+        context.subscriptions.push(vscode.Disposable.from({ dispose: watcherZU.close }));
     });
     // unsubscribe
     const disposableZUU = vscode.commands.registerCommand("menu-item-sample.unsubscribeZU", (node: IZoweTreeNode) => {
-        zoweWatcher.unsubscribe(eventZoweUser);
+        tryCatch(() => zoweWatcher.unsubscribe(eventZoweUser));
         zoweUserEmits = 0;
-        vscode.window.showInformationMessage("Unsubscribed[U]");
+        vscode.window.showInformationMessage("Unsubscribed[ZU]");
     });
 
 
     // [Z]owe [S]hared event - "onCredentialManagerChanged"
     // subscribe
-    const disposableZSS = vscode.commands.registerCommand("menu-item-sample.subscribeS", (node: IZoweTreeNode) => {
-        const watcherZS = zoweWatcher.subscribeShared(eventZoweShared, () => {
+    const disposableZSS = vscode.commands.registerCommand("menu-item-sample.subscribeZS", (node: IZoweTreeNode) => {
+        const watcherZS = tryCatch(() => zoweWatcher.subscribeShared(eventZoweShared, () => {
             vscode.window.showInformationMessage("Registered callbacks[ZS] - number: " + zoweSharedEmits++);
-        });
+        }));
         vscode.window.showInformationMessage("Subscribed[ZS]");
-        context.subscriptions.push(vscode.Disposable.from({dispose: watcherZS.close}));
+        context.subscriptions.push(vscode.Disposable.from({ dispose: watcherZS.close }));
     });
     // unsubscribe
     const disposableZSU = vscode.commands.registerCommand("menu-item-sample.unsubscribeZS", (node: IZoweTreeNode) => {
-        zoweWatcher.unsubscribe(eventZoweShared);
+        tryCatch(() => zoweWatcher.unsubscribe(eventZoweShared));
         zoweSharedEmits = 0;
         vscode.window.showInformationMessage("Unsubscribed[ZS]");
     });
@@ -94,37 +98,37 @@ export function activate(context: vscode.ExtensionContext) {
 
     //////////////////////////////////////////////////////////////
     // Subscribe to Extender Events
-    const extenderWatcher = imperative.EventOperator.getWatcher('customApp');
+    const extenderWatcher = tryCatch(() => imperative.EventOperator.getWatcher("customApp"));
     //////////////////////////////////////////////////////////////
 
     // [E]xtender [U]ser event - "extenderUserEvent"
     // subscribe
     const disposableEUS = vscode.commands.registerCommand("menu-item-sample.subscribeEU", (node: IZoweTreeNode) => {
-        const watcherEU = extenderWatcher.subscribeUser(eventExtenderUser, () => {
+        const watcherEU = tryCatch(() => extenderWatcher.subscribeUser(eventExtenderUser, () => {
             vscode.window.showInformationMessage("Registered callbacks [EU] - number: " + extenderUserEmits++);
-        });
+        }));
         vscode.window.showInformationMessage("Subscribed[EU]");
-        context.subscriptions.push(vscode.Disposable.from({dispose: watcherEU.close}));
+        context.subscriptions.push(vscode.Disposable.from({ dispose: watcherEU.close }));
     });
     // unsubscribe
     const disposableEUU = vscode.commands.registerCommand("menu-item-sample.unsubscribeEU", (node: IZoweTreeNode) => {
-        extenderWatcher.unsubscribe(eventExtenderUser);
+        tryCatch(() => extenderWatcher.unsubscribe(eventExtenderUser));
         extenderUserEmits = 0;
         vscode.window.showInformationMessage("Unsubscribed[EU]");
     });
 
-    // [E]ustom [S]hared events - "extenderSharedEvent"
+    // [E]xtender [S]hared events - "extenderSharedEvent"
     // subscribe
-    const disposableESS = vscode.commands.registerCommand("menu-item-sample.subscribeCS", (node: IZoweTreeNode) => {
-        const watcherEUS = extenderWatcher.subscribeUser(eventExtenderShared, () => {
+    const disposableESS = vscode.commands.registerCommand("menu-item-sample.subscribeES", (node: IZoweTreeNode) => {
+        const watcherEUS = tryCatch(() => extenderWatcher.subscribeUser(eventExtenderShared, () => {
             vscode.window.showInformationMessage("Registered callback for emission event [ES] - number: " + extenderSharedEmits++);
-        });
+        }));
         vscode.window.showInformationMessage("Subscribed[ES]");
-        context.subscriptions.push(vscode.Disposable.from({dispose: watcherEUS.close}));
+        context.subscriptions.push(vscode.Disposable.from({ dispose: watcherEUS.close }));
     });
     // unsubscribe
-    const disposableESU = vscode.commands.registerCommand("menu-item-sample.unsubscribeCS", (node: IZoweTreeNode) => {
-        extenderWatcher.unsubscribe(eventExtenderShared);
+    const disposableESU = vscode.commands.registerCommand("menu-item-sample.unsubscribeES", (node: IZoweTreeNode) => {
+        tryCatch(() => extenderWatcher.unsubscribe(eventExtenderShared));
         extenderSharedEmits = 0;
         vscode.window.showInformationMessage("Unsubscribed[ES]");
     });
@@ -135,4 +139,8 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(disposableZSE, disposableZSS, disposableZSU);
     context.subscriptions.push(disposableEUE, disposableEUS, disposableEUU);
     context.subscriptions.push(disposableESE, disposableESS, disposableESU);
+
+    //////////////////////////////////////////////////////////////
+    // done
+    vscode.window.showInformationMessage("Sample extension was activated successfully!");
 }
