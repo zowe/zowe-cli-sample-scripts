@@ -117,7 +117,7 @@ export function activate(context: vscode.ExtensionContext) {
     // [E]xtender [S]hared events - "extenderSharedEvent"
     // subscribe
     const disposableESS = vscode.commands.registerCommand("menu-item-sample.subscribeES", (node: IZoweTreeNode) => {
-        const watcherESS = tryCatch(() => extenderWatcher.subscribeUser(eventExtenderShared, () => {
+        const watcherESS = tryCatch(() => extenderWatcher.subscribeShared(eventExtenderShared, () => {
             vscode.window.showInformationMessage("Registered callback for emission event [ES] - number: " + extenderSharedEmits++);
         }));
         vscode.window.showInformationMessage("Subscribed[ES]");
