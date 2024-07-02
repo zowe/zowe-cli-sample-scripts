@@ -2,11 +2,11 @@
  * This program and the accompanying materials are made available and may be used, at your option, under either:
  * - Eclipse Public License v2.0, available at https://www.eclipse.org/legal/epl-v20.html, OR
  * - Apache License, version 2.0, available at http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0 OR Apache-2.0
- * 
+ *
  * Copyright Contributors to the Zowe Project.
- * 
+ *
  */
 
 var cmd = require('node-cmd'),
@@ -132,7 +132,7 @@ gulp.task('build-lnk', 'Build LNK element', function (callback) {
     simpleCommand(command, "command-archive/build-lnk", callback);
 });
 
-gulp.task('build', 'Build Program', gulpSequence('build-cobol','build-lnk'));
+gulp.task('build', 'Build Program', gulpSequence('build-cobol', 'build-lnk'));
 
 gulp.task('cics-refresh', 'Refresh(new-copy) ' + config.cicsProgram + ' CICS Program', function (callback) {
     var command = 'zowe cics refresh program "' + config.cicsProgram + '"';
@@ -152,4 +152,4 @@ gulp.task('copy-load', 'Copy LOADLIB to test environment', function (callback) {
     simpleCommand(command, "command-archive/copy-load", callback);
 });
 
-gulp.task('deploy', 'Deploy Program', gulpSequence('copy-dbrm','copy-load','bind-n-grant','cics-refresh'));
+gulp.task('deploy', 'Deploy Program', gulpSequence('copy-dbrm', 'copy-load', 'bind-n-grant', 'cics-refresh'));

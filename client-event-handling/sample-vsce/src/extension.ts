@@ -10,9 +10,9 @@
  */
 
 import * as vscode from "vscode";
-import { IZoweTreeNode } from "@zowe/zowe-explorer-api";
+import { IZoweTreeNode, imperative } from "@zowe/zowe-explorer-api";
 // import * as imperative from "@zowe/imperative";
-const imperative = require("@zowe/imperative");
+// const imperative: any = require("@zowe/imperative");
 
 export function activate(context: vscode.ExtensionContext) {
     // TO DO:
@@ -28,9 +28,9 @@ export function activate(context: vscode.ExtensionContext) {
     const eventExtenderUser = "extenderUserEvent";
     const eventExtenderShared = "extenderSharedEvent";
 
-    const tryCatch = (cb: Function): any => {
-        try { return cb() } catch (err) { vscode.window.showErrorMessage(JSON.stringify(err)); }
-    }
+    const tryCatch = (cb: any): any => {
+        try { return cb(); } catch (err) { vscode.window.showErrorMessage(JSON.stringify(err)); }
+    };
     const zoweEmitter = tryCatch(() => imperative.EventOperator.getEmitter("Zowe"));
     const extenderEmitter = tryCatch(() => imperative.EventOperator.getEmitter('customApp'));
 
