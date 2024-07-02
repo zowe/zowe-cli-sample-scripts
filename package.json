@@ -24,9 +24,11 @@
   },
   "homepage": "https://github.com/zowe/zowe-cli-sample-scripts#readme",
   "devDependencies": {
+    "@types/node": "^20.14.9",
     "@typescript-eslint/eslint-plugin": "^4.29.0",
     "@typescript-eslint/parser": "^4.29.0",
     "eslint": "^7.32.0",
+    "eslint-cli": "^1.1.1",
     "eslint-plugin-jest": "^24.4.0",
     "eslint-plugin-mocha": "^10.0.3",
     "eslint-plugin-unused-imports": "^1.1.2",

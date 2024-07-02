@@ -1,12 +1,12 @@
 /*
- * This program and the accompanying materials are made available and may be used, at your option, under either: *
- * * Eclipse Public License v2.0, available at https://www.eclipse.org/legal/epl-v20.html, OR *
- * * Apache License, version 2.0, available at http://www.apache.org/licenses/LICENSE-2.0 *
- *                                                                                       *
- * SPDX-License-Identifier: EPL-2.0 OR Apache-2.0                                        *
- *                                                                                       *
- * Copyright Contributors to the Zowe Project.                                           *
- *                                                                                       *
+ * This program and the accompanying materials are made available and may be used, at your option, under either:
+ * - Eclipse Public License v2.0, available at https://www.eclipse.org/legal/epl-v20.html, OR
+ * - Apache License, version 2.0, available at http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0 OR Apache-2.0
+ *
+ * Copyright Contributors to the Zowe Project.
+ *
  */
 
 const os = require("os");
@@ -19,20 +19,15 @@ require("glob")("{*,!(node_modules)/}**/{*.js,*.ts,Jenkinsfile,*.py,*.sh}", (glo
         throw globErr;
     }
     // turn the license file into a multi line comment
-    const desiredLineLength = 86;
     let alreadyContainedCopyright = 0;
     const jsHeader = "/*\n" + fs.readFileSync("LICENSE_HEADER").toString()
         .split(/\r?\n/g).map((line) => {
-            const lenAdjust = desiredLineLength - line.length;
-            const pad = Array((lenAdjust < 0) ? 0 : lenAdjust).join(" ");
-            return " * " + line + pad + " *";
+            return " * " + line;
         })
         .join(os.EOL) + os.EOL + " */" + os.EOL + os.EOL;
     const shHeader = "#\n" + fs.readFileSync("LICENSE_HEADER").toString()
         .split(/\r?\n/g).map((line) => {
-            const lenAdjust = desiredLineLength - line.length;
-            const pad = Array((lenAdjust < 0) ? 0 : lenAdjust).join(" ");
-            return "# " + line + pad + " #";
+            return "# " + line;
         })
         .join(os.EOL) + os.EOL + "#" + os.EOL + os.EOL;
 
