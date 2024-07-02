@@ -6,6 +6,13 @@ import { readFileSync, writeFileSync } from "fs";
   const impTsConfigPath = join(impDir, "tsconfig.json");
   const impTsConfig = JSON.parse(readFileSync(impTsConfigPath).toString());
   delete impTsConfig.extends;
+  
+  impTsConfig.compilerOptions = {
+    ...impTsConfig.compilerOptions,
+    target: "es2018",
+    module: "commonjs",
+  };
+  
   impTsConfig.exclude = [
     "**/__tests__/**",
     "**/__mocks__/**",

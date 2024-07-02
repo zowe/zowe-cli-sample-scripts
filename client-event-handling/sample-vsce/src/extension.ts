@@ -20,6 +20,7 @@ export function activate(context: vscode.ExtensionContext) {
     // [x] custom watcher (subscribe and unsubscribe)
     // [x] custom emitters (emit)
 
+    const customApp = "custom-app";
     //////////////////////////////////////////////////////////////
     // Simulated Event Emission
     //////////////////////////////////////////////////////////////
@@ -31,11 +32,13 @@ export function activate(context: vscode.ExtensionContext) {
     const tryCatch = (cb: any): any => {
         try { return cb(); } catch (err) { vscode.window.showErrorMessage(JSON.stringify(err)); }
     };
+    tryCatch(() => {
+        imperative.ConfigUtils.writeExtendersJson({ profileTypes: { [customApp]: { from: [ customApp ] } } });
+    });
     const zoweEmitter = tryCatch(() => imperative.EventOperator.getEmitter("Zowe"));
-    const extenderEmitter = tryCatch(() => imperative.EventOperator.getEmitter('customApp'));
+    const extenderEmitter = tryCatch(() => imperative.EventOperator.getEmitter(customApp));
 
     let zoweUserEmits = 0, zoweSharedEmits = 0, extenderUserEmits = 0, extenderSharedEmits = 0;
-
     const disposableZUE = vscode.commands.registerCommand("menu-item-sample.emitZU", (node: IZoweTreeNode) => {
         tryCatch(() => zoweEmitter.emitEvent(eventZoweUser));
         vscode.window.showInformationMessage("Emission Event [ZU] - number: " + zoweUserEmits++);
@@ -95,7 +98,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     //////////////////////////////////////////////////////////////
     // Subscribe to Extender Events
-    const extenderWatcher = tryCatch(() => imperative.EventOperator.getWatcher("customApp"));
+    const extenderWatcher = tryCatch(() => imperative.EventOperator.getWatcher(customApp));
     //////////////////////////////////////////////////////////////
 
     // [E]xtender [U]ser event - "extenderUserEvent"
