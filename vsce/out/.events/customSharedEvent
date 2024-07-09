@@ -1,7 +1,0 @@
-{
-  "eventTime": "2024-05-13T20:38:28.958Z",
-  "eventName": "customSharedEvent",
-  "eventType": 0,
-  "appName": "customApp",
-  "eventFilePath": "C:\\Users\\at895452\\Desktop\\zowe-cli-v3\\poc-1987\\out\\.events\\customSharedEvent"
-}
