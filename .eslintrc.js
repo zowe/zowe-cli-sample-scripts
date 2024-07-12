@@ -9,7 +9,9 @@ module.exports = {
         "plugin:@typescript-eslint/recommended"
     ],
     "ignorePatterns": [
-        "**/*.d.ts"
+        "**/*.d.ts",
+        "**/.eslintrc.js",
+        "client-event-handling/**"
     ],
     "overrides": [
         {

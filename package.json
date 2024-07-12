@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "node utils/updateLicense.js",
-    "lint": "eslint \"**/*.ts\" \"**/*.js\" --ignore-pattern \"**/.eslintrc.js\""
+    "lint": "eslint \"**/*.ts\" \"**/*.js\""
   },
   "repository": {
     "type": "git",
@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/zowe/zowe-cli-sample-scripts#readme",
   "devDependencies": {
+    "@types/node": "^20.14.9",
     "@typescript-eslint/eslint-plugin": "^4.29.0",
     "@typescript-eslint/parser": "^4.29.0",
     "eslint": "^7.32.0",

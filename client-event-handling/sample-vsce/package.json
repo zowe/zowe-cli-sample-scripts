@@ -1,0 +1,165 @@
+{
+  "name": "menu-item-sample",
+  "displayName": "menu-item-sample",
+  "description": "Menu item sample for Zowe Explorer",
+  "version": "0.0.1",
+  "publisher": "Zowe",
+  "repository": "https://github.com/zowe/vscode-extension-for-zowe/samples/menu-item-sample",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "menu-item-sample.emitES",
+        "title": "Emit[ES]"
+      },
+      {
+        "command": "menu-item-sample.subscribeES",
+        "title": "Subscribe[ES]"
+      },
+      {
+        "command": "menu-item-sample.unsubscribeES",
+        "title": "Unsubscribe[ES]"
+      },
+      {
+        "command": "menu-item-sample.emitEU",
+        "title": "Emit[EU]"
+      },
+      {
+        "command": "menu-item-sample.subscribeEU",
+        "title": "Subscribe[EU]"
+      },
+      {
+        "command": "menu-item-sample.unsubscribeEU",
+        "title": "Unsubscribe[EU]"
+      },
+      {
+        "command": "menu-item-sample.emitZU",
+        "title": "Emit[ZU]"
+      },
+      {
+        "command": "menu-item-sample.subscribeZU",
+        "title": "Subscribe[ZU]"
+      },
+      {
+        "command": "menu-item-sample.unsubscribeZU",
+        "title": "Unsubscribe[ZU]"
+      },
+      {
+        "command": "menu-item-sample.emitZS",
+        "title": "Emit[ZS]"
+      },
+      {
+        "command": "menu-item-sample.subscribeZS",
+        "title": "Subscribe[ZS]"
+      },
+      {
+        "command": "menu-item-sample.unsubscribeZS",
+        "title": "Unsubscribe[ZS]"
+      }
+    ],
+    "menus": {
+      "view/item/context": [
+        {
+          "when": "view =~ /^zowe\\./",
+          "command": "menu-item-sample.subscribeES",
+          "group": "100_zowe_menuItemSample@0"
+        },
+        {
+          "when": "view =~ /^zowe\\./",
+          "command": "menu-item-sample.emitES",
+          "group": "100_zowe_menuItemSample@0"
+        },
+        {
+          "when": "view =~ /^zowe\\./",
+          "command": "menu-item-sample.unsubscribeES",
+          "group": "100_zowe_menuItemSample@0"
+        },
+        {
+          "when": "view =~ /^zowe\\./",
+          "command": "menu-item-sample.subscribeEU",
+          "group": "100_zowe_menuItemSample@0"
+        },
+        {
+          "when": "view =~ /^zowe\\./",
+          "command": "menu-item-sample.emitEU",
+          "group": "100_zowe_menuItemSample@0"
+        },
+        {
+          "when": "view =~ /^zowe\\./",
+          "command": "menu-item-sample.unsubscribeEU",
+          "group": "100_zowe_menuItemSample@0"
+        },
+        {
+          "when": "view =~ /^zowe\\./",
+          "command": "menu-item-sample.subscribeZS",
+          "group": "100_zowe_menuItemSample@0"
+        },
+        {
+          "when": "view =~ /^zowe\\./",
+          "command": "menu-item-sample.emitZS",
+          "group": "100_zowe_menuItemSample@0"
+        },
+        {
+          "when": "view =~ /^zowe\\./",
+          "command": "menu-item-sample.unsubscribeZS",
+          "group": "100_zowe_menuItemSample@0"
+        },
+        {
+          "when": "view =~ /^zowe\\./",
+          "command": "menu-item-sample.subscribeZU",
+          "group": "100_zowe_menuItemSample@0"
+        },
+        {
+          "when": "view =~ /^zowe\\./",
+          "command": "menu-item-sample.emitZU",
+          "group": "100_zowe_menuItemSample@0"
+        },
+        {
+          "when": "view =~ /^zowe\\./",
+          "command": "menu-item-sample.unsubscribeZU",
+          "group": "100_zowe_menuItemSample@0"
+        }
+      ]
+    }
+  },
+  "extensionDependencies": [
+    "Zowe.vscode-extension-for-zowe"
+  ],
+  "resolutions": {
+    "@zowe/imperative": "8.0.0-next.202407112150"
+  },
+  "scripts": {
+    "preinstall": "rimraf node_modules/@zowe yarn.lock || true",
+    "postinstall": "rimraf yarn.lock",
+    "vscode:prepublish": "yarn run compile",
+    "build:imp": "node res/compileImperative.mjs",
+    "compile": "tsc -p ./",
+    "build": "tsc -p ./",
+    "lint": "eslint \"src/**/*.ts\"",
+    "watch": "tsc -watch -p ./"
+  },
+  "dependencies": {
+    "@zowe/zowe-explorer-api": "^3.0.0-next.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/jquery": "^3.5.29",
+    "@types/node": "^16.18.34",
+    "@types/vscode": "^1.53.2",
+    "@typescript-eslint/eslint-plugin": "^5.42.0",
+    "@typescript-eslint/parser": "^5.42.0",
+    "eslint": "^8.26.0",
+    "stream-to-string": "^1.2.1",
+    "typescript": "^5.1.3",
+    "uuid": "^9.0.1"
+  }
+}
