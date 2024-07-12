@@ -33,7 +33,7 @@ export function activate(context: vscode.ExtensionContext) {
         try { return cb(); } catch (err) { vscode.window.showErrorMessage(JSON.stringify(err)); }
     };
     tryCatch(() => {
-        imperative.ConfigUtils.writeExtendersJson({ profileTypes: { [customApp]: { from: [ customApp ] } } });
+        (imperative.ConfigUtils as any).writeExtendersJson({ profileTypes: { [customApp]: { from: [ customApp ] } } });
     });
     const zoweEmitter = tryCatch(() => imperative.EventOperator.getEmitter("Zowe"));
     const extenderEmitter = tryCatch(() => imperative.EventOperator.getEmitter(customApp));

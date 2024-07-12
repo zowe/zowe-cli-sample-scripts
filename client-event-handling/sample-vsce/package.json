@@ -135,17 +135,17 @@
     "Zowe.vscode-extension-for-zowe"
   ],
   "resolutions": {
-    "@zowe/imperative": "https://gitpkg.now.sh/zowe/zowe-cli/packages/imperative?ac67acc9d01ec2514c1cb3a022c13a1c5d85a79e"
+    "@zowe/imperative": "8.0.0-next.202407112150"
   },
   "scripts": {
     "preinstall": "rimraf node_modules/@zowe yarn.lock || true",
     "postinstall": "rimraf yarn.lock",
     "vscode:prepublish": "yarn run compile",
     "build:imp": "node res/compileImperative.mjs",
-    "compile": "npm run build:imp && tsc -p ./",
+    "compile": "tsc -p ./",
     "build": "tsc -p ./",
     "lint": "eslint \"src/**/*.ts\"",
-    "watch": "npm run build:imp && tsc -watch -p ./"
+    "watch": "tsc -watch -p ./"
   },
   "dependencies": {
     "@zowe/zowe-explorer-api": "^3.0.0-next.0"
