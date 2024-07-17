@@ -1,0 +1,93 @@
+name: Update Zowe Version and Create PR
+
+on:
+  workflow_dispatch:
+    inputs:
+      major_version:
+        description: 'Major version (default is 3)'
+        required: false
+        default: '3'
+      minor_version:
+        description: 'Minor version'
+        required: true
+      patch_version:
+        description: 'Patch version'
+        required: true
+      zowe_version:
+        description: "Zowe Version Tag"
+        default: zowe-v3-lts
+        required: true
+        type: choice
+        options:
+        - zowe-v2-lts
+        - zowe-v3-lts
+
+jobs:
+  update_versions_and_create_pr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set Default Branch Environment Variable
+        run: |
+          if [[ "${{ github.event.inputs.zowe_version }}" == "zowe-v2-lts" ]]; then
+            echo "defaultBranch=v2.x/rc" >> $GITHUB_ENV
+          else
+            echo "defaultBranch=v3.x/rc" >> $GITHUB_ENV
+          fi
+
+      - name: Checkout zowe-cli-sample-scripts repo
+        uses: actions/checkout@v4
+        with:
+          repository: 'zowe/zowe-cli-sample-scripts'
+          ref: ${{ env.defaultBranch }}
+          token: ${{ secrets.ZOWE_ROBOT_TOKEN }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Get Current Zowe Version from package.json
+        id: get_current_version
+        run: |
+          current_version=$(jq -r '.version' package.json)
+          echo "current_version=$current_version" >> $GITHUB_ENV
+
+      - name: Check that New Zowe Version is Greater
+        id: check_version
+        run: |
+          new_version="${{ github.event.inputs.major_version }}.${{ github.event.inputs.minor_version }}.${{ github.event.inputs.patch_version }}"
+          IFS='.' read -ra current <<< "$current_version"
+          IFS='.' read -ra new <<< "$new_version"
+          if [[ ${new[0]} -lt ${current[0]} || ( ${new[0]} -eq ${current[0]} && ${new[1]} -lt ${current[1]} ) || ( ${new[0]} -eq ${current[0]} && ${new[1]} -eq ${current[1]} && ${new[2]} -le ${current[2]} ) ]]; then
+            echo "Error: New version $new_version is not greater than current version $current_version."
+            exit 1
+          fi
+
+      - name: Create Branch
+        run: |
+          branch_name="v${{ github.event.inputs.major_version }}.${{ github.event.inputs.minor_version }}.${{ github.event.inputs.patch_version }}/cli/rc"
+          git checkout -b "$branch_name"
+
+      - name: Update Zowe Version in package.json
+        run: |
+          new_version="${{ github.event.inputs.major_version }}.${{ github.event.inputs.minor_version }}.${{ github.event.inputs.patch_version }}"
+          jq ".version = \"$new_version\"" package.json > package.tmp.json && mv package.tmp.json package.json
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name ${{ secrets.ZOWE_ROBOT_USER }}
+          git config --global user.email ${{ secrets.ZOWE_ROBOT_EMAIL }}
+          git add "package.json"
+          git commit -sm "Update version to $new_version"
+          git push origin HEAD
+
+      - name: Create Pull Request
+        run: |
+          version="${{ github.event.inputs.major_version }}.${{ github.event.inputs.minor_version }}.${{ github.event.inputs.patch_version }}"
+          branch_name="v$version/cli/rc"
+          pr_title="Update CLI version to $version"
+          gh pr create --base ${{ env.defaultBranch }} --head "$branch_name" --title "$pr_title" --body "Updating Zowe CLI version to $version" --reviewer ATorrise
+          echo "Pull Request created successfully"
+        env:
+          GH_TOKEN: ${{ secrets.ZOWE_ROBOT_TOKEN }}
