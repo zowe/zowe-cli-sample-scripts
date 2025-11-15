@@ -21,12 +21,12 @@ const path = require("path");
     let alreadyContainedCopyright = 0;
     const jsHeader = "/*\n" + fs.readFileSync("LICENSE_HEADER").toString()
         .split(/\r?\n/g).map((line) => {
-            return " * " + line;
+            return line ? " * " + line : " *";
         })
         .join(os.EOL) + os.EOL + " */" + os.EOL + os.EOL;
     const shHeader = "#\n" + fs.readFileSync("LICENSE_HEADER").toString()
         .split(/\r?\n/g).map((line) => {
-            return "# " + line;
+            return line ? "# " + line : "#";
         })
         .join(os.EOL) + os.EOL + "#" + os.EOL + os.EOL;
 
