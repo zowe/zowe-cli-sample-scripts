@@ -86,7 +86,7 @@ def zowe(arguments: str):
     old_color = os.environ['FORCE_COLOR']
     os.environ['FORCE_COLOR'] = "0"
     zowe_command = "zowe " + arguments + " --rfj"
-    os.environ['FORCE_COLOR'] = old_color
+    
     try:
         completed_process = subprocess.run(
             zowe_command, shell=True, capture_output=True, check=True, encoding="utf8")
@@ -95,3 +95,5 @@ def zowe(arguments: str):
     except subprocess.CalledProcessError as e:
         raise ZoweCallError(e.returncode, e.cmd, arguments,
                             output=e.output, stderr=e.stderr)
+    finally:
+        os.environ['FORCE_COLOR'] = old_color
