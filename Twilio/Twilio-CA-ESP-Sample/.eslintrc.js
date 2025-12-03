@@ -1,3 +1,4 @@
+const maxLines = 150;
 module.exports = {
     "root": true,
     "env": {
@@ -43,14 +44,14 @@ module.exports = {
         "unused-imports"
     ],
     "rules": {
-        "max-len": ["warn", 150],
+        "max-len": ["warn", maxLines],
         "no-console": "off",
         "no-multiple-empty-lines": "warn",
         "no-trailing-spaces": "warn",
         "@typescript-eslint/ban-types": "off",
         "@typescript-eslint/comma-dangle": ["warn", "only-multiline"],
         "@typescript-eslint/explicit-module-boundary-types": "off",
-        "@typescript-eslint/indent": ["warn", 4],
+        "@typescript-eslint/indent": ["warn", 2],
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-inferrable-types": "off",
         "@typescript-eslint/no-magic-numbers": ["warn", {
