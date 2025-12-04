@@ -24,6 +24,7 @@ Example::
 """
 import subprocess
 import json
+import os
 
 
 class ZoweCallError(Exception):
@@ -82,13 +83,14 @@ def zowe(arguments: str):
         for job in zowe("zos-jobs list jobs"):
             print(f"Job {job['jobid']} has return code {job['retcode']}")
     """
-
     zowe_command = "zowe " + arguments + " --rfj"
+    
     try:
+        temp_env = os.environ.copy()
+        temp_env['FORCE_COLOR'] = "0"   
         completed_process = subprocess.run(
-            zowe_command, shell=True, capture_output=True, check=True, encoding="utf8")
+            zowe_command, shell=True, capture_output=True, check=True, encoding="utf8", env=temp_env)
         parsed_output = json.loads(completed_process.stdout)
         return parsed_output.get("data", parsed_output)
     except subprocess.CalledProcessError as e:
-        raise ZoweCallError(e.returncode, e.cmd, arguments,
-                            output=e.output, stderr=e.stderr)
+        raise ZoweCallError(e.returncode, e.cmd, arguments, output=e.output, stderr=e.stderr)
