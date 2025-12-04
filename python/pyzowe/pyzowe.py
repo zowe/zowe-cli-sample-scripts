@@ -87,7 +87,7 @@ def zowe(arguments: str):
     
     try:
         temp_env = os.environ.copy()
-        # temp_env['FORCE_COLOR'] = "0"   
+        temp_env['FORCE_COLOR'] = "0"   
         completed_process = subprocess.run(
             zowe_command, shell=True, capture_output=True, check=True, encoding="utf8", env=temp_env)
         parsed_output = json.loads(completed_process.stdout)
